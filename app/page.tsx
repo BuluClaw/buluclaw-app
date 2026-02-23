@@ -610,18 +610,6 @@ onClick={() => window.location.href = "/checkout"}
 
 </footer>
 
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
 
   );
