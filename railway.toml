@@ -1,2 +1,16 @@
 [build]
-ignore = ["bot-worker"]
+builder = "NIXPACKS"
+
+[phases.setup]
+nixPkgs = ["nodejs_20", "yarn"]
+
+[phases.install]
+cwd = "app"
+
+[phases.build]
+cmd = "npm run build"
+cwd = "app"
+
+[start]
+cmd = "npm run start"
+cwd = "app"
