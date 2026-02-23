@@ -2,16 +2,16 @@
 builder = "NIXPACKS"
 
 [phases.setup]
-nixPkgs = ["nodejs_20", "yarn"]
+nixPkgs = ["nodejs_20"]
 
 [phases.install]
+cwd = "./app"
 cmd = "npm install"
-cwd = "."
 
 [phases.build]
+cwd = "./app"
 cmd = "npm run build"
-cwd = "."
 
 [start]
+cwd = "./app"
 cmd = "npm start"
-cwd = "."
