@@ -6,11 +6,12 @@ nixPkgs = ["nodejs_20", "yarn"]
 
 [phases.install]
 cwd = "."
+cmd = "npm install"
 
 [phases.build]
 cmd = "npm run build"
 cwd = "."
 
 [start]
-cmd = "npm run start"
+cmd = "npm start"
 cwd = "."
