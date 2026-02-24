@@ -5,9 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-   
-    "start": "node .next/standalone/server.js",
-    "lint": "eslint"
+    "start": "node .next/standalone/server.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
