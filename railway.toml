@@ -5,13 +5,10 @@ builder = "NIXPACKS"
 nixPkgs = ["nodejs_20"]
 
 [phases.install]
-cwd = "./app"
 cmd = "npm install"
 
 [phases.build]
-cwd = "./app"
 cmd = "npm run build"
 
 [start]
-cwd = "./app"
 cmd = "npm start"
