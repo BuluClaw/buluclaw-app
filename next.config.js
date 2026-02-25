@@ -1,13 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
-
+  output: 'standalone',
   experimental: {
-    turbo: {},       
     serverActions: {
-      allowedOrigins: ["*"],
+      allowedOrigins: ['*'],
     },
   },
+  distDir: '.next',
 };
 
 module.exports = nextConfig;
