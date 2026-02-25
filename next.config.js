@@ -2,11 +2,8 @@
 const nextConfig = {
   output: 'standalone',
   experimental: {
-    serverActions: {
-      allowedOrigins: ['*'],
-    },
+    serverActions: true
   },
-  distDir: '.next',
 };
 
 module.exports = nextConfig;
