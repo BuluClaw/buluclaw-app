@@ -188,9 +188,14 @@ setTimeout(() => {
 
   return (
 
-<div className="min-h-screen text-white px-6 pt-32 pb-20 flex flex-col items-center bg-gradient-to-b from-black via-[#0b1120] to-black">
+
+  <div className="min-h-screen text-white px-6 pt-40 pb-20 flex flex-col items-center bg-gradient-to-b from-black via-[#0b1120] to-black">
       {/* HEADER */}
-      <div className="w-full max-w-6xl flex justify-between items-center mb-20">
+      <div
+  className="w-full max-w-6xl flex justify-between items-center px-6 py-6
+  fixed top-0 left-1/2 -translate-x-1/2 z-50
+  backdrop-blur-xl bg-black/40 border-b border-white/10 rounded-b-2xl"
+>
         <h1 className="text-xl font-semibold tracking-wide">
           BuluClaw<span className="text-zinc-500">.com</span>
         </h1>
