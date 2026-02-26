@@ -1,3 +1,0 @@
-
-cp -r .next/static .next/standalone/.next/static
-node .next/standalone/server.js -p $PORT
