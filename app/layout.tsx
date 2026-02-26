@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen bg-[#020617] text-white">
         <Providers>
           {children}
         </Providers>
