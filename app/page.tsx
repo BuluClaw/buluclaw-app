@@ -187,8 +187,7 @@ setTimeout(() => {
 };
 
   return (
-    
-<div className="min-h-screen text-white px-6 py-20 flex flex-col items-center bg-gradient-to-b from-black via-[#0b1120] to-black">
+    <div className="min-h-screen text-white px-6 py-10 flex flex-col items-center bg-gradient-to-b from-black via-[#0b1120] to-black">
 
       {/* HEADER */}
       <div className="w-full max-w-6xl flex justify-between items-center mb-20">
