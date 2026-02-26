@@ -1,1 +1,1 @@
-node .next/standalone/server.js -p $PORT
+node .next/standalone/server.js
