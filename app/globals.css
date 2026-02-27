@@ -1,41 +1,21 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-html, body {
-  background: #000;
-  color: white;
+/* Smooth font */
+* {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
+
+/* Background gradient */
 body {
-  background: radial-gradient(circle at 20% 30%, #0f172a, #020617);
-  background-attachment: fixed;
+  background: radial-gradient(circle at center, #0b1120, #020305, #000);
+  min-height: 100vh;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-image: radial-gradient(white 1px, transparent 1px);
-  background-size: 50px 50px;
-  opacity: 0.08;
-  pointer-events: none;
-}
-
-
-
-
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  animation: marquee 25s linear infinite;
-}
-
-.direction-reverse {
-  animation-direction: reverse;
-}
-
-.group:hover .pause {
-  animation-play-state: paused;
+/* Star field background */
+.bg-stars {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.10) 1px, transparent 1px);
+  background-size: 22px 22px;
 }

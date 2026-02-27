@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { LogOut } from "lucide-react";
 import UseCasesMarquee from "./components/UseCasesMarquee";
+import { LogOut } from "lucide-react";
+
 async function subscribe() {
   const email = prompt("Enter your email");
 
@@ -520,7 +521,7 @@ onClick={() => window.location.href = "/checkout"}
 {/* Comparison Section */}
 
 
-<section className="w-full py-32">
+<section className="w-full py-10">
 
 
   <h2 className="text-center text-4xl font-semibold mb-20 tracking-wide">
@@ -585,7 +586,7 @@ onClick={() => window.location.href = "/checkout"}
 </section>
 
 
-<UseCasesMarquee />
+  <UseCasesMarquee />
 
 
 
