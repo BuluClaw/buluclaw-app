@@ -42,7 +42,8 @@ export default function MarqueeRow({
       if (reverse && position >= 0) {
         position = -scrollWidth / 2;
       }
-
+      
+if (!row) return;
       row.style.transform = `translateX(${position}px)`;
 
       requestAnimationFrame(animate);
