@@ -55,7 +55,15 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      
+      {/* RIGHT SIDE */}
+      <div className="w-1/2 bg-blue flex items-center justify-center p-16">
+        <div className="w-full max-w-md shadow-xl border rounded-2xl p-8">
+
+          
+        </div>
+      </div>
+
+
     </div>
   );
 }
