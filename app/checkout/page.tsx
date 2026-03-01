@@ -55,26 +55,7 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {/* RIGHT SIDE */}
-      <div className="w-1/2 bg-white flex items-center justify-center p-16">
-        <div className="w-full max-w-md shadow-xl border rounded-2xl p-8">
-
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            You will be charged $49.00
-          </h2>
-
-          <p className="text-gray-500 text-sm mb-6">
-            Secure payment powered by Razorpay
-          </p>
-
-          
-
-          <p className="text-gray-400 text-xs text-center mt-4">
-            Payments are encrypted & secured
-          </p>
-
-        </div>
-      </div>
+      
     </div>
   );
 }
