@@ -3,69 +3,9 @@
 import { useEffect } from "react";
 
 export default function CheckoutPage() {
+ 
 
-  // Load Razorpay script
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
-
-  const startPayment = async () => {
-    try {
-      // Send Email to Backend
-      const res = await fetch("/api/create-subscription", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: "test@gmail.com",
-        }),
-      });
-
-      const sub = await res.json();
-      console.log("SUB RESPONSE →", sub);
-
-      // Check Subscription ID
-      if (!sub.sub_id) {
-        alert("Subscription error: No ID received!");
-        console.log(sub);
-        return;
-      }
-
-      // Razorpay Subscription Popup
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        subscription_id: sub.sub_id,
-        name: "BuluClaw Pro",
-        description: "Monthly Subscription",
-        theme: {
-          color: "#6366f1",
-        },
-
-        handler: function (response: any) {
-          alert("Payment Successful!");
-          console.log(response);
-        },
-
-        modal: {
-          ondismiss: function () {
-            alert("Payment Cancelled");
-          },
-        },
-      };
-
-      const rzp = new (window as any).Razorpay(options);
-      rzp.open();
-
-    } catch (err) {
-      console.error("Payment Error:", err);
-      alert("Something went wrong!");
-    }
-  };
-
+  
   return (
     <div className="min-h-screen flex">
 
@@ -127,12 +67,7 @@ export default function CheckoutPage() {
             Secure payment powered by Razorpay
           </p>
 
-          <button
-            onClick={startPayment}
-            className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition"
-          >
-            Continue to Payment
-          </button>
+          
 
           <p className="text-gray-400 text-xs text-center mt-4">
             Payments are encrypted & secured
