@@ -75,26 +75,15 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {/* RIGHT SIDE (PADDLE CHECKOUT BUTTON) */}
-      <div className="w-1/2 bg-[#0b1120] text-white p-16 flex flex-col justify-center">
+     
 
-        <div className="border border-gray-600 rounded-xl p-10 bg-[#111827] w-[80%] mx-auto">
-          <h2 className="text-2xl font-semibold mb-5 text-center">
-            Complete Your Payment
-          </h2>
+        {/* RIGHT SIDE (PADDLE CHECKOUT INLINE UI) */}
+<div className="w-1/2 bg-[#0b1120] text-white p-16 flex flex-col justify-center">
+  <div id="paddle-checkout-container">
 
-          <button
-            onClick={openCheckout}
-            className="w-full bg-purple-600 hover:bg-purple-700 transition text-white font-semibold py-4 rounded-lg text-lg"
-          >
-            Continue to Payment
-          </button>
-
-          <p className="text-center text-gray-400 text-sm mt-4">
-            Payments are securely processed by Paddle
-          </p>
-        </div>
-      </div>
+          </div>
+       </div> 
+      
     </div>
   );
 }
