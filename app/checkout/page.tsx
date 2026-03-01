@@ -25,9 +25,9 @@ export default function CheckoutPage() {
           <div>
             <div className="font-semibold text-lg">BuluClaw Pro</div>
             <p className="text-zinc-400 text-sm mt-2">
-              Deploy your own 24/7 active OpenClaw instance in under 1 minute.
+              Deploy your own 24/7 active OpenClaw instance in under 1 minute.Billed monthly
             </p>
-            <div className="text-zinc-400 text-sm mt-2">Billed monthly</div>
+           
           </div>
 
           <div className="ml-auto font-semibold">$49.00</div>
