@@ -13,7 +13,7 @@ export default function CheckoutPage() {
       <div className="w-1/2 bg-black text-white p-16">
         <p className="text-gray-400 mb-2">Subscribe to BuluClaw</p>
 
-        <h1 className="text-5xl font-bold mb-8">
+        <h1 className="text-2xl font-bold mb-8">
           $49.00 <span className="text-lg font-normal">per month</span>
         </h1>
 
@@ -27,7 +27,7 @@ export default function CheckoutPage() {
             <p className="text-zinc-400 text-sm mt-2">
               Deploy your own 24/7 active OpenClaw instance in under 1 minute.Billed monthly
             </p>
-           
+            
           </div>
 
           <div className="ml-auto font-semibold">$49.00</div>
