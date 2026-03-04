@@ -5,27 +5,53 @@ import Script from "next/script";
 
 export default function CheckoutPage() {
 
+const [promo,setPromo] = useState("");
+const [price,setPrice] = useState(3999);
+
+const applyPromo = () => {
+
+if(promo === "BULU10"){
+setPrice(3599);
+alert("Promo Applied 🎉")
+}
+else{
+alert("Invalid Code")
+}
+
+}
+
 const startPayment = async () => {
 
-const res = await fetch("/api/create-order",{method:"POST"});
+const res = await fetch("/api/create-order",{
+method:"POST",
+body:JSON.stringify({amount:price})
+});
+
 const order = await res.json();
 
 const options = {
+
 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
 amount: order.amount,
-currency: order.currency,
+currency:"INR",
 order_id: order.id,
 
 name:"BuluClaw",
-description:"BuluClaw Pro",
+description:"BuluClaw Pro Subscription",
+
+theme:{
+color:"#4f46e5"
+},
 
 handler:function(response:any){
 alert("Payment Successful 🚀")
 }
+
 };
 
 const rzp = new (window as any).Razorpay(options);
 rzp.open();
+
 };
 
 return(
@@ -44,7 +70,7 @@ Subscribe to BuluClaw
 </p>
 
 <h1 className="text-5xl font-bold">
-₹3999
+₹{price}
 <span className="text-lg font-normal ml-2">
 per month
 </span>
@@ -57,13 +83,13 @@ per month
 <div>
 
 <h3 className="text-lg font-semibold">
-BuluClaw
+BuluClaw Pro
 </h3>
 
 <p className="text-gray-400 text-sm mt-1 max-w-md">
 Avoid all technical complexity and one click deploy your own
 24/7 active OpenClaw instance under 1 minute.
-Billed monthly
+Billed monthly.
 </p>
 
 </div>
@@ -73,22 +99,25 @@ Billed monthly
 <hr className="border-gray-800 my-10"/>
 
 <div className="flex justify-between text-lg">
-
 <span>Subtotal</span>
-<span>₹3999</span>
-
+<span>₹{price}</span>
 </div>
 
-{/* PROMO */}
+{/* PROMO CODE */}
 
 <div className="flex gap-3 mt-6">
 
 <input
+value={promo}
+onChange={(e)=>setPromo(e.target.value)}
 placeholder="Add promotion code"
 className="bg-transparent border border-gray-700 px-4 py-3 rounded-lg w-full"
 />
 
-<button className="bg-gray-700 px-5 rounded-lg">
+<button
+onClick={applyPromo}
+className="bg-gray-700 px-5 rounded-lg"
+>
 Apply
 </button>
 
@@ -97,7 +126,7 @@ Apply
 <div className="flex justify-between mt-8 text-lg font-semibold">
 
 <span>Total due today</span>
-<span>₹3999</span>
+<span>₹{price}</span>
 
 </div>
 
@@ -108,13 +137,13 @@ Apply
 
 <div className="w-1/2 bg-[#0f172a] flex items-center justify-center">
 
-<div className="bg-white rounded-xl p-10 w-[420px] text-center">
+<div className="bg-white rounded-xl p-10 w-[420px] text-center shadow-lg">
 
 <button
 onClick={startPayment}
-className="w-full bg-indigo-600 text-white py-4 rounded-lg text-lg"
+className="w-full bg-indigo-600 text-white py-4 rounded-lg text-lg hover:bg-indigo-700 transition"
 >
-Pay ₹3999
+Pay ₹{price}
 </button>
 
 <p className="text-gray-500 text-sm mt-4">
@@ -128,5 +157,6 @@ Secure payment powered by Razorpay
 </div>
 
 </>
+
 );
 }
