@@ -6,12 +6,12 @@ import Script from "next/script";
 export default function CheckoutPage() {
 
 const [promo,setPromo] = useState("");
-const [price,setPrice] = useState(3999);
+const [price,setPrice] = useState(1);
 
 const applyPromo = () => {
 
 if(promo === "BULU10"){
-setPrice(3599);
+setPrice(0);
 alert("Promo Applied 🎉")
 }
 else{
