@@ -116,7 +116,7 @@ className="bg-transparent border border-gray-700 px-4 py-3 rounded-lg w-full"
 
 <button
 onClick={applyPromo}
-className="bg-blue -700 px-5 rounded-lg"
+className="bg-sky-500 -700 px-5 rounded-lg"
 >
 Apply
 </button>
