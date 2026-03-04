@@ -1,89 +1,85 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState } from "react";
 
 export default function CheckoutPage() {
-  useEffect(() => {
-    // Load Paddle Script
-    const script = document.createElement("script");
-    script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
-    script.onload = () => {
-      // @ts-ignore
-      Paddle.Initialize({
-        token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
-      });
-    };
-    document.body.appendChild(script);
-  }, []);
 
-  // Open Paddle Checkout
-  const openCheckout = () => {
-    // @ts-ignore
-    Paddle.Checkout.open({
-      items: [
-        {
-          priceId: "pri_01kjmzyprbfcqqbekwzvyvv6hm1", // Your Paddle Price ID
-          quantity: 1,
-        },
-      ],
+  const startPayment = async () => {
+
+    const res = await fetch("/api/create-order", {
+      method: "POST",
     });
+
+    const data = await res.json();
+
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: data.amount,
+      currency: "USD",
+      name: "BuluClaw",
+      description: "BuluClaw Pro Subscription",
+      order_id: data.id,
+
+      handler: function (response: any) {
+        alert("Payment successful!");
+      }
+    };
+
+    const rzp = new (window as any).Razorpay(options);
+    rzp.open();
   };
 
   return (
+
     <div className="min-h-screen flex">
 
-      {/* LEFT SIDE (PRODUCT INFO) */}
+      {/* LEFT SIDE */}
       <div className="w-1/2 bg-black text-white p-16">
-        <p className="text-gray-400 mb-2">Subscribe to BuluClaw</p>
+
+        <p className="text-gray-400 mb-2">
+          Subscribe to BuluClaw
+        </p>
 
         <h1 className="text-5xl font-bold mb-8">
           $49.00 <span className="text-lg font-normal">per month</span>
         </h1>
 
-        <div className="flex items-start gap-4 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-purple-600 flex items-center justify-center">
-            ✨
-          </div>
+        <div className="flex gap-4 items-start mb-6">
+          <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl"></div>
+
           <div>
-            <h3 className="text-xl font-semibold mb-1">BuluClaw Pro</h3>
-            <p className="text-gray-400 w-[80%]">
+            <h3 className="font-semibold text-lg">
+              BuluClaw Pro
+            </h3>
+
+            <p className="text-gray-400 text-sm mt-1">
               Deploy your own 24/7 active OpenClaw instance in under 1 minute.
-              <br />Billed monthly.
+              Billed monthly.
             </p>
           </div>
         </div>
 
-        <div className="mt-10">
-          <label className="block text-gray-300 mb-2">Promotion code</label>
-          <div className="flex gap-3">
-            <input
-              className="bg-[#111] border border-gray-700 px-4 py-3 rounded-lg w-64"
-              placeholder="Add promotion code"
-            />
-            <button className="bg-gray-700 px-6 rounded-lg">Apply</button>
-          </div>
+        <div className="border-t border-gray-800 pt-6 mt-10 flex justify-between">
+          <span>Subtotal</span>
+          <span>$49.00</span>
         </div>
 
-        <div className="mt-10">
-          <p className="text-gray-300">Subtotal</p>
-          <p className="text-xl font-bold">$49.00</p>
-        </div>
-
-        <div className="mt-5">
-          <p className="text-gray-300">Total due today</p>
-          <p className="text-xl font-bold">$49.00</p>
-        </div>
       </div>
 
-     
 
-        {/* RIGHT SIDE (PADDLE CHECKOUT INLINE UI) */}
-<div className="w-1/2 bg-[#0b1120] text-white p-16 flex flex-col justify-center">
-  <div id="paddle-checkout-container">
+      {/* RIGHT SIDE */}
+      <div className="w-1/2 bg-[#0b1730] flex items-center justify-center">
 
-          </div>
-       </div> 
-      
+        <button
+          onClick={startPayment}
+          className="bg-blue-600 text-white px-10 py-4 rounded-xl text-lg"
+        >
+          Pay $49
+        </button>
+
+      </div>
+
     </div>
+
   );
 }

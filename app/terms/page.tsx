@@ -10,7 +10,7 @@ export default function TermsPage() {
       <ul>
         <li>Subscription auto-renews unless cancelled.</li>
         <li>Refunds within 7 days for technical issues only.</li>
-        <li>Payments are processed securely by Paddle.</li>
+        <li>Payments are processed securely by Razorpay.</li>
         <li>Do not misuse the platform for spam or illegal activity.</li>
       </ul>
       <p>Contact: support@buluclaw.com</p>
