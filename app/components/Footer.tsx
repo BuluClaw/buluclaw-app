@@ -10,7 +10,7 @@ export default function Footer() {
         </p>
 
         <div className="flex gap-6 text-sm">
-          <a href="/pricing" className="hover:text-white">Pricing</a>
+          
           <a href="/terms" className="hover:text-white">Terms of Service</a>
           <a href="/privacy" className="hover:text-white">Privacy Policy</a>
           <a href="/refund" className="hover:text-white">Refund Policy</a>
