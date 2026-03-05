@@ -31,14 +31,14 @@ return(
 
 <div>
 
-<p className="text-gray-400 mb-4">
-Fold Ventures
+<p className="text-gray-400 mb-2">
+Back
 </p>
 
-<h1 className="text-5xl font-bold">
+<h1 className="text-3xl font-bold">
 ₹{price}
-<span className="text-lg font-normal ml-2">
-per month
+<span className="text-xs font-normal ml-2">
+/per month
 </span>
 </h1>
 
@@ -62,7 +62,7 @@ Billed monthly.
 
 </div>
 
-<hr className="border-gray-800 my-10"/>
+<hr className="border-gray-800 my-6"/>
 
 <div className="flex justify-between text-lg">
 <span>Subtotal</span>
@@ -71,25 +71,25 @@ Billed monthly.
 
 {/* PROMO */}
 
-<div className="flex gap-3 mt-6">
+<div className="flex gap-2 mt-2">
 
 <input
 value={promo}
 onChange={(e)=>setPromo(e.target.value)}
 placeholder="Add promotion code"
-className="bg-transparent border border-gray-700 px-4 py-3 rounded-lg w-full"
+className="bg-transparent border border-gray-700 px-4 py-2 rounded-lg w-full"
 />
 
 <button
 onClick={applyPromo}
-className="bg-indigo-600 px-5 rounded-lg"
+className="bg-indigo-600 px-4  rounded-lg "
 >
 Apply
 </button>
 
 </div>
 
-<hr className="border-gray-800 my-4"/>
+<hr className="border-gray-800 my-2"/>
 
 <div className="flex justify-between text-lg font-semibold">
 
