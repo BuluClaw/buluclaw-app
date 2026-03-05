@@ -40,11 +40,11 @@ className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-white
 
 <span className="text-lg">‹</span>
 <span>Back</span>
-<p className="text-gray-400 mt-2 mb-0">
+</div>
+
+<p className="text-gray-500 text-sm mb-2">
 Subscribe to BuluClaw
 </p>
-
-</div>
 
 <h1 className="text-3xl font-bold">
 ₹{price}
@@ -63,7 +63,7 @@ Subscribe to BuluClaw
 BuluClaw Pro
 </h3>
 
-<p className="text-gray-400 text-sm mt-1 max-w-md">
+<p className="text-gray-400 text-sm mt-0 max-w-md">
 Avoid all technical complexity and one click deploy your own
 24/7 active OpenClaw instance under 1 minute.
 Billed monthly.
