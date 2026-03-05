@@ -89,7 +89,7 @@ Apply
 
 </div>
 
-<hr className="border-gray-800 my-8"/>
+<hr className="border-gray-800 my-4"/>
 
 <div className="flex justify-between text-lg font-semibold">
 
