@@ -20,53 +20,19 @@ alert("Invalid Code")
 
 }
 
-const startPayment = async () => {
-
-const res = await fetch("/api/create-order",{
-method:"POST",
-body:JSON.stringify({amount:price})
-});
-
-const order = await res.json();
-
-const options = {
-
-key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-amount: order.amount,
-currency:"INR",
-order_id: order.id,
-
-name:"BuluClaw",
-description:"BuluClaw Pro Subscription",
-
-theme:{
-color:"#4f46e5"
-},
-
-handler:function(response:any){
-alert("Payment Successful 🚀")
-}
-
-};
-
-const rzp = new (window as any).Razorpay(options);
-rzp.open();
-
-};
-
 return(
 
 <>
-<Script src="https://checkout.razorpay.com/v1/checkout.js"/>
-
 <div className="min-h-screen flex">
 
 {/* LEFT PANEL */}
 
-<div className="w-1/2 bg-black text-white p-16">
+<div className="w-1/2 bg-black text-white p-16 flex flex-col justify-between">
 
-<p className="text-gray-400 mb-3">
-Subscribe to BuluClaw
+<div>
+
+<p className="text-gray-400 mb-4">
+Fold Ventures
 </p>
 
 <h1 className="text-5xl font-bold">
@@ -103,7 +69,7 @@ Billed monthly.
 <span>₹{price}</span>
 </div>
 
-{/* PROMO CODE */}
+{/* PROMO */}
 
 <div className="flex gap-3 mt-6">
 
@@ -116,14 +82,16 @@ className="bg-transparent border border-gray-700 px-4 py-3 rounded-lg w-full"
 
 <button
 onClick={applyPromo}
-className="bg-sky-500 -700 px-5 rounded-lg"
+className="bg-indigo-600 px-5 rounded-lg"
 >
 Apply
 </button>
 
 </div>
 
-<div className="flex justify-between mt-8 text-lg font-semibold">
+<hr className="border-gray-800 my-8"/>
+
+<div className="flex justify-between text-lg font-semibold">
 
 <span>Total due today</span>
 <span>₹{price}</span>
@@ -132,21 +100,33 @@ Apply
 
 </div>
 
+</div>
+
 
 {/* RIGHT PAYMENT */}
 
-<div className="w-1/2 bg-[#0f172a] flex items-center justify-center">
+<div className="w-1/2 bg-white flex items-center justify-center">
 
-<div className="bg-white rounded-xl p-10 w-[420px] text-center shadow-lg">
+<div className="text-center w-[420px]">
 
-<button
-onClick={startPayment}
-className="w-full bg-indigo-600 text-white py-4 rounded-lg text-lg hover:bg-indigo-700 transition"
->
-Pay ₹{price}
-</button>
+<h2 className="text-2xl font-semibold mb-8">
+Complete your subscription
+</h2>
 
-<p className="text-gray-500 text-sm mt-4">
+
+{/* RAZORPAY SUBSCRIPTION BUTTON */}
+
+<form>
+<script
+src="https://cdn.razorpay.com/static/widget/subscription-button.js"
+data-subscription_button_id="pl_SNQDsGCIwNv9vg"
+data-button_theme="brand-color"
+async>
+</script>
+</form>
+
+
+<p className="text-gray-500 text-sm mt-6">
 Secure payment powered by Razorpay
 </p>
 
@@ -160,5 +140,3 @@ Secure payment powered by Razorpay
 
 );
 }
-
-
