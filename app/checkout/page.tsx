@@ -37,7 +37,8 @@ onClick={()=>router.back()}
 className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-white mb-2"
 >
 
-<span className="text-lg">←</span>
+
+<span className="text-lg">‹</span>
 <span>Back</span>
 
 </div>
