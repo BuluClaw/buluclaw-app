@@ -137,9 +137,7 @@ Complete your subscription
 
 <form dangerouslySetInnerHTML={{__html:`<script src="https://cdn.razorpay.com/static/widget/subscription-button.js" data-subscription_button_id="pl_SNUJ9TF5weTC1g"></script>`}}></form>
 
-<p className="text-gray-500 text-sm mt-6">
-Secure payment powered by Razorpay
-</p>
+
 
 </div>
 
