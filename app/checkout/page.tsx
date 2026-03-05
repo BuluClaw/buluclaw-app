@@ -40,6 +40,9 @@ className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-white
 
 <span className="text-lg">‹</span>
 <span>Back</span>
+<p className="text-gray-400 mt-6 mb-2">
+Subscribe to BuluClaw
+</p>
 
 </div>
 
