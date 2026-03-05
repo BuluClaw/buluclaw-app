@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import Script from "next/script";
+import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
 
 const [promo,setPromo] = useState("");
 const [price,setPrice] = useState(1);
-
+const router = useRouter();
 const applyPromo = () => {
 
 if(promo === "BULU10"){
@@ -31,9 +32,15 @@ return(
 
 <div>
 
-<p className="text-gray-400 mb-2">
-Back
-</p>
+<div
+onClick={()=>router.back()}
+className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-white mb-2"
+>
+
+<span className="text-lg">←</span>
+<span>Back</span>
+
+</div>
 
 <h1 className="text-3xl font-bold">
 ₹{price}
