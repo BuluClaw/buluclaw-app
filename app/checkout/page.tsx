@@ -57,7 +57,7 @@ rzp.open();
 return(
 
 <>
-<Script src="https://checkout.razorpay.com/v1/checkout.js"/>
+
 <form><script src="https://cdn.razorpay.com/static/widget/subscription-button.js" data-subscription_button_id="pl_SNQDsGCIwNv9vg" data-button_theme="brand-color" async> </script> </form>
 <div className="min-h-screen flex">
 
