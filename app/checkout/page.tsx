@@ -61,7 +61,7 @@ Subscribe to BuluClaw
 
  
    
-         <h3 className="text-lg font-semibold">
+         <h3 className="text-3xl font-semibold">
       BuluClaw Pro
     </h3>
 
