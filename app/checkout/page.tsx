@@ -60,11 +60,14 @@ Subscribe to BuluClaw
 <div className="flex justify-between w-full">
 
  
-    <h3 className="text-lg font-semibold">
+   
+         <h3 className="text-lg font-semibold">
       BuluClaw Pro
     </h3>
 
     <p className="text-gray-400 text-sm mt-1 max-w-md">
+          
+
       Avoid all technical complexity and one click deploy your own
       24/7 active OpenClaw instance under 1 minute.
       Billed monthly.
