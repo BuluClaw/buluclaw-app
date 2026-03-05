@@ -42,7 +42,7 @@ className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-white
 <span>Back</span>
 </div>
 
-<p className="text-gray-500 text-sm mb-2">
+<p className="text-gray-600 text-sm mb-2">
 Subscribe to BuluClaw
 </p>
 
@@ -57,19 +57,23 @@ Subscribe to BuluClaw
 
 <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500"/>
 
-<div>
+<div className="flex justify-between w-full">
 
-<h3 className="text-lg font-semibold">
-BuluClaw Pro
-</h3>
+ 
+    <h3 className="text-lg font-semibold">
+      BuluClaw Pro
+    </h3>
 
-<p className="text-gray-400 text-sm mt-0 max-w-md">
-Avoid all technical complexity and one click deploy your own
-24/7 active OpenClaw instance under 1 minute.
-Billed monthly.
-</p>
+    <p className="text-gray-400 text-sm mt-1 max-w-md">
+      Avoid all technical complexity and one click deploy your own
+      24/7 active OpenClaw instance under 1 minute.
+      Billed monthly.
+    </p>
+  </div>
 
-</div>
+  <span className="text-gray-300 font-semibold">
+    ₹{price}
+  </span>
 
 </div>
 
