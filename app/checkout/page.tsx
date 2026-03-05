@@ -66,7 +66,7 @@ Subscribe to BuluClaw
       BuluClaw Pro
     </h3>
 
-    <p className="text-gray-400 text-xl mt-2 max-w-sm leading-relaxed">
+    <p className="text-gray-400 text-xs mt-1 max-w-sm leading-relaxed">
       Avoid all technical complexity and one click deploy your own
       24/7 active OpenClaw instance under 1 minute.
       Billed monthly.
