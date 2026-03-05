@@ -57,22 +57,27 @@ Subscribe to BuluClaw
 
 <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500"/>
 
-<div className="flex justify-between w-full">
+<div className="flex justify-between items-start w-full">
 
- 
-   
-         <h3 className="text-3xl font-semibold">
+  <div>
+
+    <h3 className="text-xl font-semibold">
       BuluClaw Pro
     </h3>
 
-    <p className="text-gray-400 text-sm mt-1 max-w-md">
-          
-
+    <p className="text-gray-400 text-sm mt-2 max-w-sm leading-relaxed">
       Avoid all technical complexity and one click deploy your own
       24/7 active OpenClaw instance under 1 minute.
       Billed monthly.
     </p>
+
   </div>
+
+  <span className="text-gray-300 font-semibold">
+    ₹{price}
+  </span>
+
+</div>
 
   <span className="text-gray-300 font-semibold">
     ₹{price}
