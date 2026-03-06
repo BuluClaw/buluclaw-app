@@ -131,7 +131,7 @@ Apply
 
 <div className="text-center w-[420px]">
 
-<h2 className="text-2xl font-semibold mb-8">
+<h2 className="text-2xl font-semibold mb-8"> g
 
 </h2>
 
