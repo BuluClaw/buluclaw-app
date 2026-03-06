@@ -61,11 +61,15 @@ if (!email) {
     }
 
     // Save subscription
-    await supabase.from("subscriptions").insert({
-      user_id: user.id,
-      razorpay_sub_id: subId,
-      status: "active",
-    });
+    
+    await supabase
+  .from("subscriptions")
+  .upsert({
+    user_id: user.id,
+    razorpay_sub_id: subId,
+    status: "active",
+  });
+
 
     // Activate user
     await supabase
