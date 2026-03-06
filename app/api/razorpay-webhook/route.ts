@@ -64,6 +64,7 @@ if (!email) {
     await supabase.from("subscriptions").insert({
       user_id: user.id,
       razorpay_sub_id: subId,
+      status: "active",
     });
 
     // Activate user

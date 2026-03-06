@@ -148,6 +148,16 @@ data-success_url="https://www.buluclaw.com/dashboard"
   }}
 />
 
+  
+<Script id="razorpay-success">
+{`
+window.addEventListener("message", function (event) {
+  if (event.data === "payment.success") {
+    window.location.href = "/dashboard";
+  }
+});
+`}
+</Script>
 
 </div>
 
