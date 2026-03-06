@@ -141,8 +141,10 @@ Apply
 src="https://cdn.razorpay.com/static/widget/subscription-button.js"
 data-subscription_button_id="pl_SNUN6sr0ET9inS"
 data-button_theme="brand-color"
-data-success_url="https://www.buluclaw.com/dashboard"
+
+data-success_url="https://www.buluclaw.com/payment-success"
 data-cancel_url="https://www.buluclaw.com/checkout"
+
 ></script>
 
 

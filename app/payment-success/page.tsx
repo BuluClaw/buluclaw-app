@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
+import { createClient } from "@supabase/supabase-js";
 
 export default async function PaymentSuccess() {
 
@@ -9,6 +10,31 @@ export default async function PaymentSuccess() {
     redirect("/login");
   }
 
-  redirect("/dashboard");
+  const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+  );
 
+  const { data: user } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", session.user?.email)
+    .single();
+
+  if (!user) {
+    redirect("/checkout");
+  }
+
+  const { data: sub } = await supabase
+    .from("subscriptions")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("status", "active")
+    .maybeSingle();
+
+  if (!sub) {
+    redirect("/checkout");
+  }
+
+  redirect("/dashboard");
 }
