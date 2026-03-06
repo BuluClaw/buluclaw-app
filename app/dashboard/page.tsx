@@ -16,15 +16,25 @@ export default async function Dashboard() {
   );
 
   const { data: user } = await supabase
-    .from("users")
-    .select("*")
-    .eq("email", session.user?.email)
-    .single();
+  .from("users")
+  .select("*")
+  .eq("email", session.user?.email)
+  .single();
 
-  if (!user || !user.active) {
-    redirect("/checkout");
-  }
+if (!user) {
+  redirect("/checkout");
+}
 
+const { data: subscription } = await supabase
+  .from("subscriptions")
+  .select("*")
+  .eq("user_id", user.id)
+  .eq("status", "active")
+  .single();
+
+if (!subscription) {
+  redirect("/checkout");
+}
   return (
     <div className="min-h-screen bg-black text-white p-10">
 
