@@ -127,7 +127,7 @@ Apply
 
 {/* RIGHT PAYMENT */}
 
-<div className="w-1/2 bg-white flex items-center justify-center">
+<div className="w-1/2 bg-slate-900 flex items-center justify-center">
 
 <div className="text-center w-[420px]">
 
