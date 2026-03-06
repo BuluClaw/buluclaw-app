@@ -26,8 +26,18 @@ export async function POST(req: Request) {
   );
 
   if (event.event === "subscription.activated") {
-    const subId = event.payload.subscription.entity.id;
-    const email = event.payload.customer.entity.email;
+    let subId = null;
+let email = null;
+
+if (event.event === "subscription.activated") {
+  subId = event.payload.subscription?.entity?.id;
+  email = event.payload.subscription?.entity?.customer_email;
+}
+
+if (!email) {
+  console.log("Webhook received but no email");
+  return NextResponse.json({ success: true });
+}
 
     // Find user
     let { data: user } = await supabase
