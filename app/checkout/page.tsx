@@ -136,7 +136,7 @@ Apply
 </h2>
 
 
-
+<form dangerouslySetInnerHTML={{__html:`<script src="https://cdn.razorpay.com/static/widget/subscription-button.js" data-subscription_button_id="pl_SNQDsGCIwNv9vg"></script>`}}></form>
 <form>
 <script 
 src="https://cdn.razorpay.com/static/widget/subscription-button.js"
