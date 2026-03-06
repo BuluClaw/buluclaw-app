@@ -127,12 +127,12 @@ Apply
 
 {/* RIGHT PAYMENT */}
 
-<div className="w-1/2 bg-slate-900 flex items-center justify-center">
+<div className="w-1/2 bg-slate-950 flex items-center justify-center">
 
 <div className="text-center w-[420px]">
 
 <h2 className="text-2xl font-semibold mb-8">
-Complete your subscription
+
 </h2>
 
 <form dangerouslySetInnerHTML={{__html:`<script src="https://cdn.razorpay.com/static/widget/subscription-button.js" data-subscription_button_id="pl_SNUJ9TF5weTC1g"></script>`}}></form>
