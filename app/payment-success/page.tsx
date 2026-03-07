@@ -22,7 +22,7 @@ const session = await getServerSession(authOptions);
     .single();
 
   if (!user) {
-    redirect("/checkout");
+    redirect("/dashboard");
   }
 
   const { data: sub } = await supabase
