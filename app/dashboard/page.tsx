@@ -1,69 +1,55 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 import { createClient } from "@supabase/supabase-js";
+import { getServerSession } from "next-auth";
 
 export default async function Dashboard() {
 
-  const session = await getServerSession();
+const session = await getServerSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+if (!session) {
+redirect("/login");
+}
 
-  const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!
-  );
+const supabase = createClient(
+process.env.SUPABASE_URL!,
+process.env.SUPABASE_SERVICE_KEY!
+);
 
-  // user find
-  const { data: user } = await supabase
-    .from("users")
-    .select("*")
-    .eq("email", session.user?.email)
-    .single();
+const { data: user } = await supabase
+.from("users")
+.select("*")
+.eq("email", session.user?.email)
+.single();
 
-  if (!user) {
-    redirect("/checkout");
-  }
+if (!user) {
+redirect("/checkout");
+}
 
-  // subscription check
-  const { data: subscription } = await supabase
-    .from("subscriptions")
-    .select("*")
-    .eq("user_id", user.id)
-    .maybeSingle();
+const { data: sub } = await supabase
+.from("subscriptions")
+.select("*")
+.eq("user_id", user.id)
+.eq("status", "active")
+.maybeSingle();
 
-  if (!subscription) {
-    redirect("/checkout");
-  }
+if (!sub) {
+redirect("/checkout");
+}
 
-  return (
-    <div className="min-h-screen bg-black text-white p-10">
+return (
 
-      <div className="flex justify-between mb-10">
-        <h1 className="text-4xl font-bold">BuluClaw Dashboard</h1>
-        <p className="text-gray-400">{session.user?.email}</p>
-      </div>
+<div className="text-white text-center mt-40">
 
-      <div className="grid grid-cols-3 gap-6">
+<h1 className="text-4xl font-bold">
+Welcome to BuluClaw Dashboard 🚀
+</h1>
 
-        <div className="bg-zinc-900 p-6 rounded-xl">
-          <h2 className="text-xl font-semibold mb-2">AI Model</h2>
-          <p>Claude Opus 4.5</p>
-        </div>
+<p className="mt-4 text-gray-400">
+Your subscription is active.
+</p>
 
-        <div className="bg-zinc-900 p-6 rounded-xl">
-          <h2 className="text-xl font-semibold mb-2">Channel</h2>
-          <p>Telegram</p>
-        </div>
+</div>
 
-        <div className="bg-zinc-900 p-6 rounded-xl">
-          <h2 className="text-xl font-semibold mb-2">Subscription</h2>
-          <p className="text-green-400">Active</p>
-        </div>
+);
 
-      </div>
-
-    </div>
-  );
 }
