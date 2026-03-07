@@ -28,11 +28,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 src="https://checkout.razorpay.com/v1/checkout.js"
 strategy="beforeInteractive"
 />
-
-
-
-
-
             {children}
           </div>
         </Providers>
