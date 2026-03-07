@@ -148,13 +148,13 @@ data-cancel_url="https://www.buluclaw.com/checkout"
 ></script>
 
 <script>
-document.addEventListener("visibilitychange", function () {
-  if (document.visibilityState === "visible") {
-    setTimeout(() => {
-      window.location.href = "/dashboard";
-    }, 1500);
+<script>
+setInterval(function () {
+  const url = window.location.href;
+  if (url.includes("razorpay_payment_id")) {
+    window.location.href = "/dashboard";
   }
-});
+}, 2000);
 </script>
 
 
