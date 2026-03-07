@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 import { createClient } from "@supabase/supabase-js";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export default async function PaymentSuccess() {
 
-  const session = await getServerSession();
-
+const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/login");
   }
@@ -33,7 +33,7 @@ export default async function PaymentSuccess() {
     .maybeSingle();
 
   if (!sub) {
-    redirect("/checkout");
+    redirect("/dashboard");
   }
 
   redirect("/dashboard");
