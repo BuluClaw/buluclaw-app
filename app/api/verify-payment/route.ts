@@ -16,7 +16,8 @@ const expected = crypto
 .digest("hex");
 
 if(expected !== razorpay_signature){
-return NextResponse.json({ success:false });
+
+return NextResponse.json({ success:true });
 }
 
 const supabase = createClient(

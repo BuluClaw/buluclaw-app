@@ -17,13 +17,17 @@ order_id: data.id,
 
 handler: async function(response:any){
 
-await fetch("/api/verify-payment",{
+const verify = await fetch("/api/verify-payment",{
 method:"POST",
 headers:{ "Content-Type":"application/json" },
 body:JSON.stringify(response)
 });
 
-window.location.href="/dashboard";
+const result = await verify.json();
+
+if(result.success){
+window.location.replace("/dashboard");
+}
 
 }
 };
