@@ -1,11 +1,12 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
 
 export default async function PaymentSuccess() {
 
-const session = await getServerSession(authOptions);
+
+const session = await getServerSession();
   if (!session) {
     redirect("/login");
   }
