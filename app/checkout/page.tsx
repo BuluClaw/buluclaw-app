@@ -40,13 +40,12 @@ return(
 
 <div className="flex h-screen items-center justify-center">
 
+
 <button
 onClick={pay}
-className="bg-blue-600 text-white px-8 py-4 rounded-xl"
+className="bg-blue-600 px-8 py-4 rounded-xl text-white"
 >
-
 Subscribe ₹1
-
 </button>
 
 </div>
