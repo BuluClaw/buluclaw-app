@@ -148,9 +148,11 @@ data-cancel_url="https://www.buluclaw.com/checkout"
 ></script>
 
 <script>
-window.addEventListener("message", function(e) {
-  if (e.data === "payment.success") {
-    window.location.href = "/dashboard";
+document.addEventListener("visibilitychange", function () {
+  if (document.visibilityState === "visible") {
+    setTimeout(() => {
+      window.location.href = "/dashboard";
+    }, 1500);
   }
 });
 </script>
