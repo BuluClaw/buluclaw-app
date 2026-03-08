@@ -3,9 +3,11 @@
 
 import { useState } from "react";
 
+
 import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
+    const router = useRouter();
     const [showPromo, setShowPromo] = useState(false);
 const [promo, setPromo] = useState("");
 const [price, setPrice] = useState(1);
@@ -17,28 +19,32 @@ const applyPromo = () => {
   } else {
     alert("Invalid Code");
   }
-};
+}
 
-const router = useRouter();
+const handlePayment = async () => {
 
-const handlePayment = () => {
+const res = await fetch("/api/create-order", {
+  method: "POST",
+});
+
+const order = await res.json();
 
 const options = {
-key: "RAZORPAY_KEY_ID=rzp_live_SNPo9lOlRp0US7",
-amount: 100, // ₹1 = 100 paise
-currency: "INR",
-name: "BuluClaw",
-description: "Monthly Subscription",
-handler: function (response: any) {
-alert("Payment Successful " + response.razorpay_payment_id);
-window.location.href = "/dashboard";
-},
-prefill: {
-email: "customer@email.com",
-},
-theme: {
-color: "#2563eb",
-},
+  key: "rzp_live_SNPo910lRp0uS7",
+  amount: order.amount,
+  currency: "INR",
+  name: "BuluClaw",
+  description: "Monthly Subscription",
+  order_id: order.id,
+
+  handler: function (response:any) {
+    alert("Payment Successful " + response.razorpay_payment_id);
+    window.location.href = "/dashboard";
+  },
+
+  theme: {
+    color: "#2563eb",
+  },
 };
 
 const rzp = new (window as any).Razorpay(options);
