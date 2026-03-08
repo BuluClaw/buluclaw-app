@@ -31,7 +31,7 @@ const { data } = await supabase
 .select("*")
 .eq("user_id", user.id)
 .eq("status","active")
-.single();
+.maybeSingle();
 
 if(!data){
 router.push("/checkout");
