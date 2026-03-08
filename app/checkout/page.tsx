@@ -147,28 +147,19 @@ Apply
 
 </div>
 
+
 {/* RIGHT SIDE */}
 
 <div className="w-1/2 flex items-center justify-center">
 
-<div className="w-[400px] text-center">
+<div className="w-[420px] text-center">
 
 <h2 className="text-xl mb-6">Complete your payment</h2>
 
-<form id="razorpay-subscription"></form>
-
-<script
-dangerouslySetInnerHTML={{
-__html: `
-setTimeout(function(){
-  var form = document.getElementById("razorpay-subscription");
-  if(form){
-    form.innerHTML = '<script src="https://cdn.razorpay.com/static/widget/subscription-button.js" data-subscription_button_id="pl_SNUN6sr0ET9inS" data-button_theme="brand-color"></script>';
-  }
-},500);
-`
-}}
-/>
+<iframe
+src="https://rzp.io/i/pl_SNUN6sr0ET9inS"
+className="w-full h-[260px] rounded-xl border border-gray-800"
+></iframe>
 
 <p className="text-gray-400 text-sm mt-5">
 Secure payment powered by Razorpay
