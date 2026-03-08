@@ -52,18 +52,18 @@ return (
 
 {/* LEFT SIDE */}
 
-<div className="w-1/2 p-4 border-r border-gray-800">
+<div className="w-1/2 p-8 border-r border-gray-800">
 
 <button
 onClick={() => router.back()}
-className="mb-4 text-gray-400 hover:text-white"
+className="mb-8 text-gray-800 hover:text-white"
 >
 ← Back
 </button>
 
-<h1 className="text-1xl font-semibold">Subscribe to BuluClaw</h1>
+<h1 className="text-1xl font-semibold  text-gray-400">Subscribe to BuluClaw</h1>
 
-<div className="text-3xl font-bold mt-3">
+<div className="text-2xl font-bold mt-3">
 ₹1
 <span className="text-lg font-normal text-gray-400 ml-2">
 per month
@@ -90,7 +90,7 @@ Avoid all technical complexity and one click deploy your own
 
 <hr className="border-gray-800 my-4" />
 
-<div className="flex justify-between text-gray-800">
+<div className="flex justify-between text-gray-100">
 <span>Subtotal</span>
 <span>₹1</span>
 </div>
