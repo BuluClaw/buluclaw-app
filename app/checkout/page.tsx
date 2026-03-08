@@ -12,7 +12,7 @@ const options = {
 key: "RAZORPAY_KEY_ID=rzp_live_SNPo9lOlRp0US7",
 amount: 100, // ₹1 = 100 paise
 currency: "INR",
-name: "SimpleClaw",
+name: "BuluClaw",
 description: "Monthly Subscription",
 handler: function (response: any) {
 alert("Payment Successful " + response.razorpay_payment_id);
@@ -46,9 +46,9 @@ className="mb-10 text-gray-400 hover:text-white"
 ← Back
 </button>
 
-<h1 className="text-3xl font-semibold">Subscribe to SimpleClaw</h1>
+<h1 className="text-1xl font-semibold">Subscribe to BuluClaw</h1>
 
-<div className="text-5xl font-bold mt-3">
+<div className="text-3xl font-bold mt-3">
 ₹1
 <span className="text-lg font-normal text-gray-400 ml-2">
 per month
@@ -60,9 +60,9 @@ per month
 <div className="w-12 h-12 bg-red-500 rounded-xl"></div>
 
 <div>
-<div className="font-semibold">SimpleClaw</div>
+<div className="font-semibold">BuluClaw</div>
 
-<p className="text-gray-400 text-sm mt-1 max-w-md">
+<p className="text-gray-400 text-xs mt-1 max-w-md">
 Avoid all technical complexity and one click deploy your own
 24/7 active OpenClaw instance under 1 minute.
 </p>
