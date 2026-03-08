@@ -61,25 +61,27 @@ className="mb-8 text-gray-400 hover:text-white"
 ← Back
 </button>
 
-<h1 className="text-1xl font-semibold  text-gray-700">Subscribe to BuluClaw</h1>
+<h1 className="text-1xl font-semibold  text-gray-500">Subscribe to BuluClaw</h1>
 
 <div className="text-2xl font-bold mt-3">
 ₹1
-<span className="text-lg font-normal text-gray-400 ml-2">
-per month
+<span className="text-sm font-normal text-gray-400 ml-2">
+/per month
 </span>
 </div>
 
 <div className="mt-8 flex gap-4">
 
-<div className="w-12 h-12 bg-red-500 rounded-xl"></div>
+<div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ff3b3b] to-[#3b0a45] flex items-center justify-center shadow-lg">
+<img src="/logo.png" className="w-7 h-7" />
+</div>
 
 <div>
 <div className="font-semibold">BuluClaw</div>
 
 <p className="text-gray-400 text-xs mt-1 max-w-md">
 Avoid all technical complexity and one click deploy your own
-24/7 active OpenClaw instance under 1 minute. Billed monthly
+24/7 active OpenClaw instance under 1 minute.<br /> Billed monthly.
 </p>
 
 </div>
