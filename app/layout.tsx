@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Page Content */}
         <Providers>
           <div className="flex flex-col items-center w-full">
-           
+          
 <Script
 src="https://checkout.razorpay.com/v1/checkout.js"
 strategy="beforeInteractive"
