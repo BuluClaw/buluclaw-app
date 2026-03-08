@@ -26,6 +26,23 @@ useEffect(() => {
 
 },[]);
 
+useEffect(() => {
+
+  const checkPayment = setInterval(async () => {
+
+    const res = await fetch("/api/check-subscription");
+    const data = await res.json();
+
+    if(data.active){
+      window.location.href="/dashboard";
+    }
+
+  },2000);
+
+  return () => clearInterval(checkPayment);
+
+},[]);
+
 
 const applyPromo = () => {
 
