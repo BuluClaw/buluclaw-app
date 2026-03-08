@@ -75,7 +75,7 @@ Subscribe to BuluClaw
 
 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ff3b3b] to-[#3b0a45] flex items-center justify-center shadow-lg">
 
-<img src="/icon-red.png" className="w-7 h-7"/>
+<img src="/icons/Buluclaw.png" className="w-10 h-10 rounded-xl" />
 
 </div>
 
