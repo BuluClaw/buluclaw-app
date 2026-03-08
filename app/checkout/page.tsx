@@ -73,11 +73,11 @@ Subscribe to BuluClaw
 
 <div className="mt-8 flex gap-4">
 
-<div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ff3b3b] to-[#3b0a45] flex items-center justify-center shadow-lg">
-
-<img src="/icons/Buluclaw.png" className="w-10 h-10 rounded-xl" />
-
+<div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0a0101] to-[#0b020d] flex items-center justify-center shadow-lg">
+<img src="/icons/Buluclaw.png" className="w-10 h-10 rounded-xl"/>
 </div>
+
+
 
 
 <div>
