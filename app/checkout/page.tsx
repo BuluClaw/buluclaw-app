@@ -1,68 +1,43 @@
 "use client";
 
-
-import { useState } from "react";
-import Script from "next/script";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function CheckoutPage() {
-    const router = useRouter();
-    const [showPromo, setShowPromo] = useState(false);
+
+const router = useRouter();
+
 const [promo, setPromo] = useState("");
 const [price, setPrice] = useState(1);
+
 useEffect(() => {
+
   const script = document.createElement("script");
   script.src = "https://cdn.razorpay.com/static/widget/subscription-button.js";
-  script.setAttribute("data-subscription_button_id", "pl_SNUN6sr0ET9inS");
-  script.setAttribute("data-button_theme", "brand-color");
+  script.setAttribute("data-subscription_button_id","pl_SNUN6sr0ET9inS");
+  script.setAttribute("data-button_theme","brand-color");
   script.async = true;
 
   const form = document.getElementById("razorpay-subscribe");
-  if (form) {
+
+  if(form){
     form.appendChild(script);
   }
-}, []);
+
+},[]);
+
 
 const applyPromo = () => {
-  if (promo === "SAVE50") {
+
+  if(promo === "SAVE50"){
     setPrice(0.5);
     alert("Promo Applied");
   } else {
     alert("Invalid Code");
   }
-}
-
-const handlePayment = async () => {
-
-const res = await fetch("/api/create-order", {
-  method: "POST",
-});
-
-const order = await res.json();
-
-const options = {
-  key: "rzp_live_SNPo9lOlRp0US7",
-  amount: order.amount,
-  currency: "INR",
-  name: "BuluClaw",
-  description: "Monthly Subscription",
-  order_id: order.id,
-
-  handler: function (response:any) {
-    alert("Payment Successful " + response.razorpay_payment_id);
-    window.location.href = "/dashboard";
-  },
-
-  theme: {
-    color: "#2563eb",
-  },
-};
-
-const rzp = new (window as any).Razorpay(options);
-rzp.open();
 
 };
+
 
 return (
 
@@ -79,43 +54,72 @@ className="mb-8 text-gray-400 hover:text-white"
 ← Back
 </button>
 
-<h1 className="text-1xl font-semibold  text-gray-500">Subscribe to BuluClaw</h1>
+
+<h1 className="text-1xl font-semibold text-gray-500">
+Subscribe to BuluClaw
+</h1>
+
 
 <div className="text-2xl font-bold mt-3">
-₹1
+
+₹{price}
+
 <span className="text-sm font-normal text-gray-400 ml-2">
 /per month
 </span>
+
 </div>
+
 
 <div className="mt-8 flex gap-4">
 
 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ff3b3b] to-[#3b0a45] flex items-center justify-center shadow-lg">
-<img src="/icon red.png.png" className="w-7 h-7" />
+
+<img src="/icon-red.png" className="w-7 h-7"/>
+
 </div>
 
+
 <div>
+
 <div className="font-semibold">BuluClaw</div>
 
 <p className="text-gray-400 text-xs mt-1 max-w-md">
+
 Avoid all technical complexity and one click deploy your own
-24/7 active OpenClaw instance under 1 minute.<br /> Billed monthly.
+24/7 active OpenClaw instance under 1 minute.
+
+<br/>
+
+Billed monthly.
+
 </p>
 
 </div>
 
-<div className="ml-auto">₹1</div>
+
+<div className="ml-auto">
+₹{price}
+</div>
 
 </div>
 
-<hr className="border-gray-800 my-4" />
+
+<hr className="border-gray-800 my-4"/>
+
 
 <div className="flex justify-between text-gray-100">
+
 <span>Subtotal</span>
-<span>₹1</span>
+
+<span>₹{price}</span>
+
 </div>
 
+
+
 <div className="mt-5">
+
 
 <div className="flex gap-3 mt-3">
 
@@ -123,50 +127,73 @@ Avoid all technical complexity and one click deploy your own
 type="text"
 placeholder="Enter promo code"
 value={promo}
-onChange={(e) => setPromo(e.target.value)}
+onChange={(e)=>setPromo(e.target.value)}
 className="bg-black border border-gray-700 px-3 py-2 rounded-md"
 />
+
 
 <button
 onClick={applyPromo}
 className="bg-blue-600 px-4 py-2 rounded-md"
 >
+
 Apply
+
 </button>
 
 </div>
 
 </div>
 
-<hr className="border-gray-800 my-6" />
+
+
+<hr className="border-gray-800 my-6"/>
+
+
 
 <div className="flex justify-between text-xl font-semibold">
+
 <span>Total due today</span>
-<span>₹1</span>
+
+<span>₹{price}</span>
+
 </div>
+
 
 </div>
 
 
 {/* RIGHT SIDE */}
 
+
 <div className="w-1/2 flex items-center justify-center">
+
 
 <div className="w-[420px] text-center">
 
-<h2 className="text-xl mb-6">Complete your payment</h2>
+<h2 className="text-xl mb-6">
 
-<iframe
-src="https://rzp.io/i/pl_SNUN6sr0ET9inS"
-className="w-full h-[260px] rounded-xl border border-gray-800"
-></iframe>
+Complete your payment
+
+</h2>
+
+
+<form id="razorpay-subscribe"></form>
+
 
 <p className="text-gray-400 text-sm mt-5">
+
 Secure payment powered by Razorpay
+
 </p>
 
 </div>
 
+
 </div>
+
+
 </div>
-)}
+
+);
+}
