@@ -2,8 +2,7 @@
 
 
 import { useState } from "react";
-
-
+import Script from "next/script";
 import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
@@ -30,7 +29,7 @@ const res = await fetch("/api/create-order", {
 const order = await res.json();
 
 const options = {
-  key: "rzp_live_SNPo910lRp0uS7",
+  key: "rzp_live_SNPo9lOlRp0US7",
   amount: order.amount,
   currency: "INR",
   name: "BuluClaw",
@@ -79,7 +78,7 @@ className="mb-8 text-gray-400 hover:text-white"
 <div className="mt-8 flex gap-4">
 
 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ff3b3b] to-[#3b0a45] flex items-center justify-center shadow-lg">
-<img src="/logo.png" className="w-7 h-7" />
+<img src="/icon red.png.png" className="w-7 h-7" />
 </div>
 
 <div>
@@ -135,30 +134,32 @@ Apply
 
 </div>
 
+
 {/* RIGHT SIDE */}
 
 <div className="w-1/2 flex items-center justify-center">
 
-<div className="w-[400px]">
+<div className="w-[400px] text-center">
 
 <h2 className="text-xl mb-6">Complete your payment</h2>
 
-<button
-onClick={handlePayment}
-className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl text-lg"
->
-Pay ₹1
-</button>
+<form>
 
-<p className="text-gray-400 text-sm mt-5 text-center">
+<Script
+src="https://cdn.razorpay.com/static/widget/subscription-button.js"
+data-subscription_button_id="pl_SNUN6sr0ET9inS"
+data-button_theme="brand-color"
+strategy="lazyOnload"
+/>
+
+</form>
+
+<p className="text-gray-400 text-sm mt-5">
 Secure payment powered by Razorpay
 </p>
 
 </div>
 
 </div>
-
 </div>
-
-);
-}
+)}
