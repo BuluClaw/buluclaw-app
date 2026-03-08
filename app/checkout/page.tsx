@@ -9,7 +9,7 @@ const router = useRouter();
 const handlePayment = () => {
 
 const options = {
-key: "RAZORPAY_KEY_ID", // apni key daalna
+key: "RAZORPAY_KEY_ID=rzp_live_SNPo9lOlRp0US7",
 amount: 100, // ₹1 = 100 paise
 currency: "INR",
 name: "SimpleClaw",
