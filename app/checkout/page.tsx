@@ -1,8 +1,23 @@
 "use client";
 
+
+import { useState } from "react";
+
 import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
+    const [showPromo, setShowPromo] = useState(false);
+const [promo, setPromo] = useState("");
+const [price, setPrice] = useState(1);
+
+const applyPromo = () => {
+  if (promo === "SAVE50") {
+    setPrice(0.5);
+    alert("Promo Applied");
+  } else {
+    alert("Invalid Code");
+  }
+};
 
 const router = useRouter();
 
@@ -55,7 +70,7 @@ per month
 </span>
 </div>
 
-<div className="mt-10 flex gap-4">
+<div className="mt-8 flex gap-4">
 
 <div className="w-12 h-12 bg-red-500 rounded-xl"></div>
 
@@ -64,30 +79,57 @@ per month
 
 <p className="text-gray-400 text-xs mt-1 max-w-md">
 Avoid all technical complexity and one click deploy your own
-24/7 active OpenClaw instance under 1 minute.
+24/7 active OpenClaw instance under 1 minute. Billed monthly
 </p>
 
-<div className="text-gray-400 text-sm mt-2">
-Billed monthly
-</div>
 </div>
 
 <div className="ml-auto">₹1</div>
 
 </div>
 
-<hr className="border-gray-800 my-8" />
+<hr className="border-gray-800 my-4" />
 
 <div className="flex justify-between text-gray-400">
 <span>Subtotal</span>
 <span>₹1</span>
 </div>
 
-<button className="mt-5 border border-gray-700 px-4 py-2 rounded-md">
+<div className="mt-5">
+
+<button
+onClick={() => setShowPromo(!showPromo)}
+className="border border-gray-700 px-4 py-2 rounded-md"
+>
 Add promotion code
 </button>
 
-<hr className="border-gray-800 my-8" />
+{showPromo && (
+
+<div className="flex gap-3 mt-3">
+
+<input
+type="text"
+placeholder="Enter promo code"
+value={promo}
+onChange={(e) => setPromo(e.target.value)}
+className="bg-black border border-gray-700 px-3 py-2 rounded-md"
+/>
+
+<button
+onClick={applyPromo}
+className="bg-blue-600 px-4 py-2 rounded-md"
+>
+Apply
+</button>
+
+</div>
+
+)}
+
+</div>
+
+<hr className="border-gray-800 my-6" />
 
 <div className="flex justify-between text-xl font-semibold">
 <span>Total due today</span>
