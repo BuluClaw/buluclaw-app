@@ -134,7 +134,6 @@ Apply
 
 </div>
 
-
 {/* RIGHT SIDE */}
 
 <div className="w-1/2 flex items-center justify-center">
@@ -143,16 +142,18 @@ Apply
 
 <h2 className="text-xl mb-6">Complete your payment</h2>
 
-<form>
+<form id="razorpay-form"></form>
 
-<Script
-src="https://cdn.razorpay.com/static/widget/subscription-button.js"
+<div
+dangerouslySetInnerHTML={{
+__html: `
+<script src="https://cdn.razorpay.com/static/widget/subscription-button.js"
 data-subscription_button_id="pl_SNUN6sr0ET9inS"
-data-button_theme="brand-color"
-strategy="lazyOnload"
+data-button_theme="brand-color">
+</script>
+`
+}}
 />
-
-</form>
 
 <p className="text-gray-400 text-sm mt-5">
 Secure payment powered by Razorpay
