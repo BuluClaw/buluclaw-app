@@ -52,11 +52,11 @@ return (
 
 {/* LEFT SIDE */}
 
-<div className="w-1/2 p-12 border-r border-gray-800">
+<div className="w-1/2 p-4 border-r border-gray-800">
 
 <button
 onClick={() => router.back()}
-className="mb-10 text-gray-400 hover:text-white"
+className="mb-4 text-gray-400 hover:text-white"
 >
 ← Back
 </button>
@@ -90,21 +90,12 @@ Avoid all technical complexity and one click deploy your own
 
 <hr className="border-gray-800 my-4" />
 
-<div className="flex justify-between text-gray-400">
+<div className="flex justify-between text-gray-800">
 <span>Subtotal</span>
 <span>₹1</span>
 </div>
 
 <div className="mt-5">
-
-<button
-onClick={() => setShowPromo(!showPromo)}
-className="border border-gray-700 px-4 py-2 rounded-md"
->
-Add promotion code
-</button>
-
-{showPromo && (
 
 <div className="flex gap-3 mt-3">
 
@@ -124,8 +115,6 @@ Apply
 </button>
 
 </div>
-
-)}
 
 </div>
 
