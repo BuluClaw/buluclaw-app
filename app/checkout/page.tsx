@@ -56,12 +56,12 @@ return (
 
 <button
 onClick={() => router.back()}
-className="mb-8 text-gray-800 hover:text-white"
+className="mb-8 text-gray-400 hover:text-white"
 >
 ← Back
 </button>
 
-<h1 className="text-1xl font-semibold  text-gray-400">Subscribe to BuluClaw</h1>
+<h1 className="text-1xl font-semibold  text-gray-700">Subscribe to BuluClaw</h1>
 
 <div className="text-2xl font-bold mt-3">
 ₹1
