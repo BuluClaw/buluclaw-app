@@ -1,55 +1,50 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
-import { getServerSession } from "next-auth";
-
-export default async function Dashboard() {
-
-const session = await getServerSession();
-
-if (!session) {
-redirect("/login");
-}
 
 const supabase = createClient(
-process.env.SUPABASE_URL!,
-process.env.SUPABASE_SERVICE_KEY!
+process.env.NEXT_PUBLIC_SUPABASE_URL!,
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-const { data: user } = await supabase
-.from("users")
-.select("*")
-.eq("email", session.user?.email)
-.single();
+export default function Dashboard() {
 
-if (!user) {
-redirect("/checkout");
+const router = useRouter();
+
+useEffect(() => {
+
+const checkSubscription = async () => {
+
+const { data: { user } } = await supabase.auth.getUser();
+
+if(!user){
+router.push("/login");
+return;
 }
 
-const { data: sub } = await supabase
+const { data } = await supabase
 .from("subscriptions")
 .select("*")
 .eq("user_id", user.id)
-.eq("status", "active")
-.maybeSingle();
+.eq("status","active")
+.single();
 
-if (!sub) {
-redirect("/checkout");
+if(!data){
+router.push("/checkout");
 }
 
+};
+
+checkSubscription();
+
+},[]);
+
 return (
-
-<div className="text-white text-center mt-40">
-
-<h1 className="text-4xl font-bold">
-Welcome to BuluClaw Dashboard 🚀
-</h1>
-
-<p className="mt-4 text-gray-400">
-Your subscription is active.
-</p>
-
+<div className="text-white p-10">
+<h1 className="text-3xl">Dashboard</h1>
 </div>
-
 );
 
 }

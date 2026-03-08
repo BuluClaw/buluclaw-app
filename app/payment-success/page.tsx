@@ -2,40 +2,40 @@ import { redirect } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { getServerSession } from "next-auth";
 
-
 export default async function PaymentSuccess() {
 
-
 const session = await getServerSession();
-  if (!session) {
-    redirect("/login");
-  }
 
-  const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!
-  );
+if (!session) {
+redirect("/login");
+}
 
-  const { data: user } = await supabase
-    .from("users")
-    .select("*")
-    .eq("email", session.user?.email)
-    .single();
+const supabase = createClient(
+process.env.SUPABASE_URL!,
+process.env.SUPABASE_SERVICE_KEY!
+);
 
-  if (!user) {
-    redirect("/dashboard");
-  }
+const { data: user } = await supabase
+.from("users")
+.select("*")
+.eq("email", session.user?.email)
+.single();
 
-  const { data: sub } = await supabase
-    .from("subscriptions")
-    .select("*")
-    .eq("user_id", user.id)
-    .eq("status", "active")
-    .maybeSingle();
+if (!user) {
+redirect("/checkout");
+}
 
-  if (!sub) {
-    redirect("/dashboard");
-  }
+const { data: sub } = await supabase
+.from("subscriptions")
+.select("*")
+.eq("user_id", user.id)
+.eq("status", "active")
+.maybeSingle();
 
-  redirect("/dashboard");
+if (!sub) {
+redirect("/checkout");
+}
+
+redirect("/dashboard");
+
 }
