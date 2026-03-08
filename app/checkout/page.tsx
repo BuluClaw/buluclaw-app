@@ -4,12 +4,25 @@
 import { useState } from "react";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function CheckoutPage() {
     const router = useRouter();
     const [showPromo, setShowPromo] = useState(false);
 const [promo, setPromo] = useState("");
 const [price, setPrice] = useState(1);
+useEffect(() => {
+  const script = document.createElement("script");
+  script.src = "https://cdn.razorpay.com/static/widget/subscription-button.js";
+  script.setAttribute("data-subscription_button_id", "pl_SNUN6sr0ET9inS");
+  script.setAttribute("data-button_theme", "brand-color");
+  script.async = true;
+
+  const form = document.getElementById("razorpay-subscribe");
+  if (form) {
+    form.appendChild(script);
+  }
+}, []);
 
 const applyPromo = () => {
   if (promo === "SAVE50") {
@@ -150,7 +163,7 @@ __html: `
 setTimeout(function(){
   var form = document.getElementById("razorpay-subscription");
   if(form){
-    form.innerHTML = '<script src="https://cdn.razorpay.com/static/widget/subscription-button.js" data-subscription_button_id="pl_SNUN6sr0ET9inS" data-button_theme="brand-color"><\\/script>';
+    form.innerHTML = '<script src="https://cdn.razorpay.com/static/widget/subscription-button.js" data-subscription_button_id="pl_SNUN6sr0ET9inS" data-button_theme="brand-color"></script>';
   }
 },500);
 `
