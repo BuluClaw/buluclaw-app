@@ -51,7 +51,7 @@ const startPayment = async () => {
 
 return (
 
-<div className="min-h-screen bg-black text-white flex">
+<div className="min-h-screen bg-black text-white flex flex-col md:flex-row"></div>
 
 
 {/* LEFT SIDE */}
