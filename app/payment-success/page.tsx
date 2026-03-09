@@ -1,41 +1,23 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
-import { getServerSession } from "next-auth";
+"use client"
 
-export default async function PaymentSuccess() {
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
-const session = await getServerSession();
+export default function PaymentSuccess(){
 
-if (!session) {
-redirect("/login");
-}
+ const router = useRouter()
 
-const supabase = createClient(
-process.env.SUPABASE_URL!,
-process.env.SUPABASE_SERVICE_KEY!
-);
+ useEffect(()=>{
+   setTimeout(()=>{
+     router.push("/dashboard")
+   },2000)
+ },[])
 
-const { data: user } = await supabase
-.from("users")
-.select("*")
-.eq("email", session.user?.email)
-.single();
-
-if (!user) {
-redirect("/checkout");
-}
-
-const { data: sub } = await supabase
-.from("subscriptions")
-.select("*")
-.eq("user_id", user.id)
-.eq("status", "active")
-.maybeSingle();
-
-if (!sub) {
-redirect("/checkout");
-}
-
-redirect("/dashboard");
+ return (
+   <div className="text-white p-10">
+     <h1 className="text-3xl">Payment Successful 🎉</h1>
+     <p>Redirecting to dashboard...</p>
+   </div>
+ )
 
 }
