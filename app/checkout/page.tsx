@@ -4,6 +4,36 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
+  const startPayment = async () => {
+
+  const res = await fetch("/api/create-order", {
+    method: "POST"
+  });
+
+  const data = await res.json();
+
+  const options = {
+    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+    amount: data.amount,
+    currency: "INR",
+    name: "BuluClaw",
+    description: "BuluClaw Subscription",
+    order_id: data.id,
+
+    handler: async function () {
+      window.location.href = "/dashboard";
+    },
+
+    theme: {
+      color: "#2563eb"
+    }
+
+  };
+
+  const rzp = new (window as any).Razorpay(options);
+  rzp.open();
+
+};
 
 const router = useRouter();
 
@@ -179,35 +209,28 @@ Apply
 
 {/* RIGHT SIDE */}
 
-
 <div className="w-1/2 flex items-center justify-center">
 
+  <div className="w-[420px] text-center">
 
-<div className="w-[420px] text-center">
+    <h2 className="text-xl mb-6">
+      Complete your payment
+    </h2>
 
-<h2 className="text-xl mb-6">
+    <button
+      onClick={startPayment}
+      className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg text-lg font-semibold"
+    >
+      Pay ₹{price}
+    </button>
 
-Complete your payment
+    <p className="text-gray-400 text-sm mt-5">
+      Secure payment powered by Razorpay
+    </p>
 
-</h2>
-
-
-<form id="razorpay-subscribe"></form>
-
-
-<p className="text-gray-400 text-sm mt-5">
-
-Secure payment powered by Razorpay
-
-</p>
-
-</div>
-
+  </div>
 
 </div>
-
-
 </div>
 
-);
-}
+)}
