@@ -6,31 +6,33 @@ import { useRouter } from "next/navigation";
 export default function CheckoutPage() {
  const startPayment = async () => {
 
-  const res = await fetch("/api/create-order", {
-    method: "POST"
-  });
+const res = await fetch("/api/create-order", {
+method: "POST",
+});
 
-  const data = await res.json();
+const data = await res.json();
 
-  const options = {
-    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-    amount: data.amount,
-    currency: "INR",
-    name: "BuluClaw",
-    description: "BuluClaw Subscription",
-    order_id: data.id,
+const options = {
+key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+amount: data.amount,
+currency: "INR",
+name: "BuluClaw",
+description: "Subscription",
+order_id: data.id,
 
-    handler: function () {
-      window.location.href = "/dashboard";
-    },
+handler: function () {
+window.location.href = "/dashboard";
+},
 
-    theme: {
-      color: "#2563eb"
-    }
-  };
+theme: {
+color: "#2563eb"
+}
 
-  const rzp = new (window as any).Razorpay(options);
-  rzp.open();
+};
+
+const rzp = new (window as any).Razorpay(options);
+rzp.open();
+
 };
 
 const router = useRouter();
