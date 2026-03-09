@@ -163,6 +163,30 @@ Apply
 <span>Total due today</span>
 
 <span>₹{price}</span>
+{/* RIGHT SIDE */}
+
+<div className="w-1/2 flex items-center justify-center">
+
+  <div className="w-[420px] text-center">
+
+    <h2 className="text-xl mb-6">
+      Complete your payment
+    </h2>
+
+    <button
+      onClick={startPayment}
+      className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg text-lg font-semibold"
+    >
+      Pay ₹{price}
+    </button>
+
+    <p className="text-gray-400 text-sm mt-5">
+      Secure payment powered by Razorpay
+    </p>
+
+  </div>
+
+</div>
 
 </div>
 
