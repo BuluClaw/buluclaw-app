@@ -171,38 +171,5 @@ Apply
 
 
 
-{/* RIGHT SIDE */}
-
-
-<div className="w-1/2 flex items-center justify-center">
-
-<div className="w-[420px] text-center">
-
-<h2 className="text-xl mb-6">
-Complete your payment
-</h2>
-
-
-<button
-onClick={startPayment}
-className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg w-full text-lg"
->
-
-Pay ₹{price}
-
-</button>
-
-
-<p className="text-gray-400 text-sm mt-5">
-Secure payment powered by Razorpay
-</p>
-
 </div>
-
-</div>
-
-
-</div>
-
-);
-}
+)}
