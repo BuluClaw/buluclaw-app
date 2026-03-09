@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
-  const startPayment = async () => {
+ const startPayment = async () => {
 
   const res = await fetch("/api/create-order", {
     method: "POST"
@@ -20,19 +20,17 @@ export default function CheckoutPage() {
     description: "BuluClaw Subscription",
     order_id: data.id,
 
-    handler: async function () {
+    handler: function () {
       window.location.href = "/dashboard";
     },
 
     theme: {
       color: "#2563eb"
     }
-
   };
 
   const rzp = new (window as any).Razorpay(options);
   rzp.open();
-
 };
 
 const router = useRouter();
@@ -46,10 +44,6 @@ useEffect(() => {
   
   script.setAttribute("data-button_theme","brand-color");
   script.async = true;
-
-  
-
-  
 
 },[]);
 
@@ -234,3 +228,4 @@ Apply
 </div>
 
 )}
+
