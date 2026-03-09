@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
@@ -9,37 +9,6 @@ const router = useRouter();
 
 const [promo, setPromo] = useState("");
 const [price, setPrice] = useState(1);
-
-useEffect(() => {
-
-  const script = document.createElement("script");
-  
-  script.setAttribute("data-button_theme","brand-color");
-  script.async = true;
-
-  
-
-  
-
-},[]);
-
-useEffect(() => {
-
-  const checkPayment = setInterval(async () => {
-
-    const res = await fetch("/api/check-subscription");
-    const data = await res.json();
-
-    if(data.active){
-      window.location.href="/dashboard";
-    }
-
-  },2000);
-
-  return () => clearInterval(checkPayment);
-
-},[]);
-
 
 const applyPromo = () => {
 
@@ -53,9 +22,37 @@ const applyPromo = () => {
 };
 
 
+// 🔥 START PAYMENT
+const startPayment = async () => {
+
+  const res = await fetch("/api/create-order");
+  const order = await res.json();
+
+  const options = {
+    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+    amount: order.amount,
+    currency: "INR",
+    order_id: order.id,
+    name: "BuluClaw",
+
+    handler: function () {
+
+      // PAYMENT SUCCESS → REDIRECT
+      window.location.href = "/dashboard";
+
+    }
+  };
+
+  const rzp = new (window as any).Razorpay(options);
+  rzp.open();
+
+};
+
+
 return (
 
 <div className="min-h-screen bg-black text-white flex">
+
 
 {/* LEFT SIDE */}
 
@@ -90,8 +87,6 @@ Subscribe to BuluClaw
 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0a0101] to-[#0b020d] flex items-center justify-center shadow-lg">
 <img src="/icons/Buluclaw.png" className="w-10 h-10 rounded-xl"/>
 </div>
-
-
 
 
 <div>
@@ -131,7 +126,6 @@ Billed monthly.
 </div>
 
 
-
 <div className="mt-5">
 
 
@@ -160,7 +154,6 @@ Apply
 </div>
 
 
-
 <hr className="border-gray-800 my-6"/>
 
 
@@ -177,32 +170,34 @@ Apply
 </div>
 
 
+
 {/* RIGHT SIDE */}
 
 
 <div className="w-1/2 flex items-center justify-center">
 
-
 <div className="w-[420px] text-center">
 
 <h2 className="text-xl mb-6">
-
 Complete your payment
-
 </h2>
 
 
-<form id="razorpay-subscribe"></form>
+<button
+onClick={startPayment}
+className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg w-full text-lg"
+>
+
+Pay ₹{price}
+
+</button>
 
 
 <p className="text-gray-400 text-sm mt-5">
-
 Secure payment powered by Razorpay
-
 </p>
 
 </div>
-
 
 </div>
 
