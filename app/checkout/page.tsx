@@ -13,16 +13,13 @@ const [price, setPrice] = useState(1);
 useEffect(() => {
 
   const script = document.createElement("script");
-  script.src = "https://cdn.razorpay.com/static/widget/subscription-button.js";
-  script.setAttribute("data-subscription_button_id","pl_SNUN6sr0ET9inS");
+  
   script.setAttribute("data-button_theme","brand-color");
   script.async = true;
 
-  const form = document.getElementById("razorpay-subscribe");
+  
 
-  if(form){
-    form.appendChild(script);
-  }
+  
 
 },[]);
 
