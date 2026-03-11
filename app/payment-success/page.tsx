@@ -1,23 +1,32 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-export default function PaymentSuccess(){
+export default function PaymentSuccess() {
 
- const router = useRouter()
+  const router = useRouter();
 
- useEffect(()=>{
-   setTimeout(()=>{
-     router.push("/dashboard")
-   },2000)
- },[])
+  useEffect(() => {
 
- return (
-   <div className="text-white p-10">
-     <h1 className="text-3xl">Payment Successful 🎉</h1>
-     <p>Redirecting to dashboard...</p>
-   </div>
- )
+    const verify = async () => {
 
+      await fetch("/api/verify-payment", {
+        method: "POST"
+      });
+
+      router.push("/dashboard");
+
+    };
+
+    verify();
+
+  }, []);
+
+  return (
+    <div className="text-white text-center mt-20">
+      <h1 className="text-3xl">Payment Successful</h1>
+      <p>Setting up your account...</p>
+    </div>
+  );
 }
