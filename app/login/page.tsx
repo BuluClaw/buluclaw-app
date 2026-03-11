@@ -3,6 +3,13 @@
 import { signIn } from "next-auth/react"
 
 export default function LoginPage() {
+
+  const handleLogin = () => {
+    signIn("google", {
+      callbackUrl: "/dashboard"
+    })
+  }
+
   return (
     <div style={{color:"white",textAlign:"center",marginTop:"100px"}}>
 
@@ -10,7 +17,7 @@ export default function LoginPage() {
       <p>Please login to continue</p>
 
       <button
-        onClick={() => signIn("google")}
+        onClick={handleLogin}
         style={{
           marginTop:"20px",
           padding:"12px 24px",
