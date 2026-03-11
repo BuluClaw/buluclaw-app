@@ -1,43 +1,39 @@
-"use client";
+import { redirect } from "next/navigation";
+import { createClient } from "@supabase/supabase-js";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+export const dynamic = "force-dynamic";
 
-export default function Dashboard() {
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
-  const router = useRouter();
+export default async function Dashboard() {
 
-  useEffect(() => {
+  const { data: { user } } = await supabase.auth.getUser();
 
-    const checkSubscription = async () => {
+  // Agar login nahi hai
+  if (!user) {
+    redirect("/login");
+  }
 
-      const res = await fetch("/api/check-subscription");
-      const data = await res.json();
+  // Subscription check
+  const { data } = await supabase
+    .from("subscriptions")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("status", "active")
+    .maybeSingle();
 
-      if(!data.active){
-        router.push("/checkout");
-      }
-
-    };
-
-    checkSubscription();
-
-  },[]);
+  // Agar subscription nahi hai
+  if (!data) {
+    redirect("/checkout");
+  }
 
   return (
-
     <div className="text-white p-10">
-
-      <h1 className="text-3xl">
-        Dashboard
-      </h1>
-
-      <p className="mt-4">
-        Welcome to BuluClaw
-      </p>
-
+      <h1 className="text-3xl">Dashboard</h1>
+      <p className="mt-4">Welcome to BuluClaw</p>
     </div>
-
   );
-
 }
