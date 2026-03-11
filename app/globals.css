@@ -7,7 +7,7 @@
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
+a
 /* Background gradient */
 body {
   background: radial-gradient(circle at center, #0b1120, #020305, #000);
