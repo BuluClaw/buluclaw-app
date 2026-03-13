@@ -1,31 +1,32 @@
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export default async function Dashboard() {
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const session = await getServerSession(authOptions);
 
   // Agar login nahi hai
-  if (!user) {
+  if (!session) {
     redirect("/login");
   }
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 
   // Subscription check
   const { data } = await supabase
     .from("subscriptions")
     .select("*")
-    .eq("user_id", user.id)
     .eq("status", "active")
+    .eq("email", session.user?.email)
     .maybeSingle();
 
-  // Agar subscription nahi hai
   if (!data) {
     redirect("/checkout");
   }
@@ -33,7 +34,7 @@ export default async function Dashboard() {
   return (
     <div className="text-white p-10">
       <h1 className="text-3xl">Dashboard</h1>
-      <p className="mt-4">Welcome to BuluClaw</p>
+      <p className="mt-4">Welcome to BuluClaw 🚀</p>
     </div>
   );
 }

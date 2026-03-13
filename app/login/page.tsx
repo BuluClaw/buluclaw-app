@@ -4,10 +4,13 @@ import { signIn } from "next-auth/react"
 
 export default function LoginPage() {
 
-  const handleLogin = () => {
-    signIn("google", {
-      callbackUrl: "/dashboard"
+  const handleLogin = async () => {
+
+    const res = await signIn("google", {
+      callbackUrl: "/dashboard",
+      redirect: true
     })
+
   }
 
   return (
