@@ -19,7 +19,7 @@ export default function CheckoutPage() {
 
         <div className="mt-8 flex gap-4 items-start">
           <img
-            src="/logo.png"
+            src="/buluclaw.png"
             className="w-12 h-12 rounded-xl"
           />
 
