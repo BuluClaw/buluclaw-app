@@ -1,248 +1,89 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
- const supabase = createClient(
- process.env.NEXT_PUBLIC_SUPABASE_URL!,
- process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export default function CheckoutPage() {
- 
- const startPayment = async () => {
+  return (
+    <div className="min-h-screen bg-black text-white flex">
 
-const res = await fetch("/api/create-order", {
-method: "POST",
-});
+      {/* LEFT SIDE */}
+      <div className="w-1/2 p-12 border-r border-neutral-800">
 
-const data = await res.json();
+        <a href="/" className="text-gray-400">← Back</a>
 
-const options = {
-key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-amount: data.amount,
-currency: "INR",
-name: "BuluClaw",
-description: "Subscription",
-order_id: data.id,
+        <h1 className="text-3xl font-semibold mt-6">
+          Subscribe to BuluClaw
+        </h1>
 
+        <p className="text-4xl mt-2 font-bold">
+          ₹1 <span className="text-lg text-gray-400">/ per month</span>
+        </p>
 
-handler: async function (response: any) {
-const { data: { user } } = await supabase.auth.getUser();
- await fetch("/api/verify-payment",{
-  method:"POST",
-  headers:{ "Content-Type":"application/json" },
-  body: JSON.stringify({
-   razorpay_order_id: response.razorpay_order_id,
-   razorpay_payment_id: response.razorpay_payment_id,
-   razorpay_signature: response.razorpay_signature,
-   user_id: user?.id
-  })
- })
+        <div className="mt-8 flex gap-4 items-start">
+          <img
+            src="/logo.png"
+            className="w-12 h-12 rounded-xl"
+          />
 
- window.location.href="/dashboard"
+          <div>
+            <p className="font-semibold">BuluClaw</p>
 
-},
+            <p className="text-gray-400 text-sm mt-1">
+              Avoid all technical complexity and deploy your own 24/7
+              OpenClaw instance in 1 minute.
+            </p>
 
-};
-const rzp = new (window as any).Razorpay(options);
-rzp.open();
-};
+            <p className="text-gray-500 text-sm mt-2">
+              Billed monthly
+            </p>
+          </div>
 
-const router = useRouter();
+          <p className="ml-auto">₹1</p>
+        </div>
 
-const [promo, setPromo] = useState("");
-const [price, setPrice] = useState(1);
 
-useEffect(() => {
+        <div className="mt-10 border-t border-neutral-800 pt-6">
 
-  const script = document.createElement("script");
-  
-  script.setAttribute("data-button_theme","brand-color");
-  script.async = true;
-  document.body.appendChild(script);
+          <p className="flex justify-between">
+            <span>Subtotal</span>
+            <span>₹1</span>
+          </p>
 
-},[]);
+          <div className="mt-4 flex gap-3">
+            <input
+              placeholder="Enter promo code"
+              className="bg-neutral-900 border border-neutral-700 rounded-lg px-4 py-2 w-full"
+            />
 
-useEffect(() => {
+            <button className="bg-blue-600 px-4 rounded-lg">
+              Apply
+            </button>
+          </div>
 
-  const checkPayment = setInterval(async () => {
+          <p className="flex justify-between mt-8 text-lg font-semibold">
+            <span>Total due today</span>
+            <span>₹1</span>
+          </p>
 
-    const res = await fetch("/api/check-subscription");
-    const data = await res.json();
+        </div>
 
-    if(data.active){
-      window.location.href="/dashboard";
-    }
+      </div>
 
-  },2000);
 
-  return () => clearInterval(checkPayment);
 
-},[]);
+      {/* RIGHT SIDE */}
+      <div className="w-1/2 flex items-center justify-center">
 
+        <div className="w-full max-w-lg">
 
-const applyPromo = () => {
+          <iframe
+            src="https://buy.polar.sh/polar_cl_yLgMYY3vkBYybBBnGsVQZH7urSahmg2GGfryl2n8cRC"
+            className="w-full h-[750px] rounded-xl border border-neutral-800"
+            allow="payment"
+          />
 
-  if(promo === "SAVE50"){
-    setPrice(0.5);
-    alert("Promo Applied");
-  } else {
-    alert("Invalid Code");
-  }
+        </div>
 
-};
+      </div>
 
-
-return (
-
-<div className="min-h-screen bg-black text-white flex">
-
-{/* LEFT SIDE */}
-
-<div className="w-1/2 p-8 border-r border-gray-800">
-
-<button
-onClick={() => router.back()}
-className="mb-8 text-gray-400 hover:text-white"
->
-← Back
-</button>
-
-
-<h1 className="text-1xl font-semibold text-gray-500">
-Subscribe to BuluClaw
-</h1>
-
-
-<div className="text-2xl font-bold mt-3">
-
-₹{price}
-
-<span className="text-sm font-normal text-gray-400 ml-2">
-/per month
-</span>
-
-</div>
-
-
-<div className="mt-8 flex gap-4">
-
-<div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0a0101] to-[#0b020d] flex items-center justify-center shadow-lg">
-<img src="/icons/Buluclaw.png" className="w-10 h-10 rounded-xl"/>
-</div>
-
-
-
-
-<div>
-
-<div className="font-semibold">BuluClaw</div>
-
-<p className="text-gray-400 text-xs mt-1 max-w-md">
-
-Avoid all technical complexity and one click deploy your own
-24/7 active OpenClaw instance under 1 minute.
-
-<br/>
-
-Billed monthly.
-
-</p>
-
-</div>
-
-
-<div className="ml-auto">
-₹{price}
-</div>
-
-</div>
-
-
-<hr className="border-gray-800 my-4"/>
-
-
-<div className="flex justify-between text-gray-100">
-
-<span>Subtotal</span>
-
-<span>₹{price}</span>
-
-</div>
-
-
-
-<div className="mt-5">
-
-
-<div className="flex gap-3 mt-3">
-
-<input
-type="text"
-placeholder="Enter promo code"
-value={promo}
-onChange={(e)=>setPromo(e.target.value)}
-className="bg-black border border-gray-700 px-3 py-2 rounded-md"
-/>
-
-
-<button
-onClick={applyPromo}
-className="bg-blue-600 px-4 py-2 rounded-md"
->
-
-Apply
-
-</button>
-
-</div>
-
-</div>
-
-
-
-<hr className="border-gray-800 my-6"/>
-
-
-
-<div className="flex justify-between text-xl font-semibold">
-
-<span>Total due today</span>
-
-<span>₹{price}</span>
-
-</div>
-
-
-</div>
-
-
-{/* RIGHT SIDE */}
-
-<div className="w-1/2 flex items-center justify-center">
-
-  <div className="w-[420px] text-center">
-   
-<h2 className="text-xl mb-6">
-  Complete your payment
-</h2>
-
-<a
-  href="/api/checkout"
-  className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg text-lg font-semibold text-center block"
->
-  Subscribe Now
-</a>
-
-<p className="text-gray-400 text-sm mt-5">
-  Secure payment powered by Polar
-</p>
-
-  </div>
-
-</div>
-</div>
-
-)}
-
+    </div>
+  );
+}
