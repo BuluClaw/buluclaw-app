@@ -1,95 +1,95 @@
-"use client";
+"use client"
 
-import { useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useState } from "react"
 
 export default function Dashboard(){
 
-const { data: session } = useSession();
-const router = useRouter();
+const [loading,setLoading] = useState(false)
+const [step,setStep] = useState(1)
 
-useEffect(()=>{
+const startDeploy = () => {
 
-const paid =
-localStorage.getItem("is_paid");
+setLoading(true)
 
-if(!paid){
+setTimeout(()=>{
+setStep(2)
+},2000)
 
-router.push("/checkout");
+setTimeout(()=>{
+window.location.href="/deploy"
+},6000)
 
 }
 
-},[]);
+return(
 
-return (
+<div className="min-h-screen flex items-center justify-center bg-[#05070f] text-white">
 
-<div className="min-h-screen text-white flex flex-col items-center justify-center">
+{/* normal state */}
+{!loading && (
 
-<h1 className="text-4xl font-bold mb-2">
+<div className="text-center space-y-6">
+
+<h1 className="text-4xl font-semibold">
 Dashboard 🚀
 </h1>
 
-<p className="text-zinc-400 mb-8">
-Welcome to BuluClaw
-</p>
-
-
-<div className="bg-zinc-900 p-6 rounded-xl w-[350px] space-y-4">
-
-<div>
-<p className="text-sm text-zinc-400">
-Email
-</p>
-
-<p className="font-medium">
-{session?.user?.email}
-</p>
-</div>
-
-
-<div>
-<p className="text-sm text-zinc-400">
-Plan
-</p>
-
-<p className="text-green-400">
-Active ✅
-</p>
-</div>
-
-
 <button
-onClick={()=>{
-window.location.href="/deploy"
-}}
-className="w-full bg-white text-black py-2 rounded-lg"
+onClick={startDeploy}
+className="bg-white text-black px-8 py-3 rounded-xl"
 >
 
 Deploy AI Agent ⚡
 
 </button>
 
+</div>
 
-<button
-onClick={()=>{
+)}
 
-localStorage.removeItem("is_paid");
+{/* loading state */}
+{loading && (
 
-signOut();
+<div className="bg-[#0b0f19] p-10 rounded-xl w-[420px] text-center space-y-6 border border-gray-800">
 
-}}
-className="w-full border border-zinc-700 py-2 rounded-lg"
->
+<div className="flex justify-center">
 
-Logout
-
-</button>
+<div className="w-10 h-10 border-4 border-gray-600 border-t-white rounded-full animate-spin"/>
 
 </div>
 
+{step===1 && (
+<>
+<h2 className="text-lg">
+Starting your deployment
+</h2>
+
+<p className="text-gray-400 text-sm">
+Do not switch other tabs.
+This only takes a few seconds.
+</p>
+</>
+)}
+
+{step===2 && (
+<>
+<h2 className="text-lg">
+Purchasing local virtual machine
+</h2>
+
+<p className="text-gray-400 text-sm">
+Do not switch other tabs.
+This only takes a few seconds.
+</p>
+</>
+)}
+
 </div>
 
-);
+)}
+
+</div>
+
+)
 
 }
