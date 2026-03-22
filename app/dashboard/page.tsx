@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 
 export default function DeployPage(){
 
@@ -22,7 +23,7 @@ return(
 
 <div className="h-screen w-screen flex items-center justify-center bg-[#040612] text-white">
 
-<div className="w-full max-w-xl">
+<div className="w-full max-w-2xl px-6">
 
 {/* STEP 1 */}
 {step===1 && (
@@ -65,28 +66,39 @@ Do not switch other tabs. This only takes a few seconds.
 {/* STEP 3 TELEGRAM */}
 {step===3 && (
 
-<div className="bg-[#0b1220] p-10 rounded-xl border border-gray-800">
+<div className="bg-[#0b1220] border border-gray-800 rounded-2xl p-10">
 
-<h2 className="text-xl mb-6">
+<div className="flex items-center gap-3 mb-6">
+
+<Image
+src="/icons/icons8-telegram-50.png"
+alt="telegram"
+width={28}
+height={28}
+/>
+
+<h2 className="text-xl font-semibold">
 Connect your Telegram
 </h2>
+
+</div>
 
 <p className="text-gray-400 mb-6">
 Follow these steps
 </p>
 
-<div className="text-gray-300 space-y-3 mb-8">
+<div className="space-y-4 text-gray-300 mb-8">
 
 <p>
-1. Open BotFather
+1. Open the bot by clicking on the BotFather message.
 </p>
 
 <p>
-2. Click Start button
+2. Click the Start button to send a message to your bot.
 </p>
 
 <p>
-3. Come back and confirm
+3. Click the button below to confirm you sent the first message.
 </p>
 
 </div>
@@ -101,8 +113,8 @@ Open BotFather
 </button>
 
 <button
-onClick={()=>alert("Bot connected")}
-className="w-full bg-[#1f2937] py-3 rounded-lg"
+onClick={()=>alert("Message confirmed")}
+className="w-full bg-[#111827] border border-gray-700 py-3 rounded-lg"
 >
 
 I have sent a message ✓
