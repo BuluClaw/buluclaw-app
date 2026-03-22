@@ -1,126 +1,116 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Image from "next/image"
+import { useState } from "react";
 
-export default function DeployPage(){
+export default function Dashboard() {
 
-const [step,setStep] = useState(1)
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-useEffect(()=>{
+  function handleConnect() {
 
-setTimeout(()=>{
-setStep(2)
-},2500)
+    setLoading(true);
 
-setTimeout(()=>{
-setStep(3)
-},6000)
+    // 3 sec loader
+    setTimeout(() => {
+      setLoading(false);
+      setSuccess(true);
+    }, 3000);
 
-},[])
+  }
 
-return(
+  return (
 
-<div className="h-screen w-screen flex items-center justify-center bg-[#040612] text-white">
+    <div className="min-h-screen flex items-center justify-center bg-[#070b14]">
 
-<div className="w-full max-w-2xl px-6">
+      {!loading && !success && (
 
-{/* STEP 1 */}
-{step===1 && (
+        <div className="bg-[#0c1220] p-8 rounded-2xl w-[420px] text-center shadow-xl">
 
-<div className="flex flex-col items-center text-center">
+          <h2 className="text-white text-xl mb-4">
+            Connect your Telegram
+          </h2>
 
-<div className="w-20 h-20 border-4 border-gray-700 border-t-white rounded-full animate-spin mb-8"/>
+          <p className="text-gray-400 text-sm mb-6">
 
-<h1 className="text-3xl font-semibold mb-3">
-Starting your deployment
-</h1>
+            Follow these steps
 
-<p className="text-gray-400 text-lg">
-Do not switch other tabs. This only takes a few seconds.
-</p>
+            <br /><br />
 
-</div>
+           1. Open the bot by clicking on the BotFather message.
+            <br />
+          2. Click the Start button to send a message to your bot.
+            <br />
+            3. Click the button below to confirm you sent the first message.
+          </p>
 
-)}
+          <button
+            onClick={handleConnect}
+            className="w-full bg-white text-black py-3 rounded-lg font-medium"
+          >
+            I have sent a message ✓
+          </button>
 
-{/* STEP 2 */}
-{step===2 && (
+        </div>
 
-<div className="flex flex-col items-center text-center">
+      )}
 
-<div className="w-20 h-20 border-4 border-gray-700 border-t-white rounded-full animate-spin mb-8"/>
+      {loading && (
 
-<h1 className="text-3xl font-semibold mb-3">
-Purchasing local virtual machine
-</h1>
+        <div className="bg-[#0c1220] p-10 rounded-2xl w-[420px] text-center">
 
-<p className="text-gray-400 text-lg">
-Do not switch other tabs. This only takes a few seconds.
-</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-white border-t-transparent mx-auto mb-4" />
 
-</div>
+          <h2 className="text-white text-lg">
+            Pairing Telegram
+          </h2>
 
-)}
+          <p className="text-gray-400 text-sm mt-2">
+            Connecting your bot. Hang tight...
+          </p>
 
-{/* STEP 3 TELEGRAM */}
-{step===3 && (
+        </div>
 
-<div className="bg-[#0b1220] border border-gray-800 rounded-2xl p-10">
+      )}
 
-<div className="flex items-center gap-3 mb-6">
+      {success && (
 
-<Image
-src="/icons/icons8-telegram-50.png"
-alt="telegram"
-width={28}
-height={28}
-/>
+        <div className="bg-[#0c1220] p-10 rounded-2xl w-[420px] text-center">
 
-<h2 className="text-xl font-semibold">
-Connect your Telegram
-</h2>
+          <div className="text-green-400 text-4xl mb-3">
+            ✓
+          </div>
 
-</div>
+          <h2 className="text-white text-lg mb-2">
+            Deployment success!
+          </h2>
 
-<p className="text-gray-50 mb-6">
-Follow these steps
-</p>
+          <p className="text-gray-400 text-sm mb-6">
+            Your bot is live. Use Telegram to chat.
+          </p>
 
-<div className="space-y-4 text-gray-300 mb-8">
+          <div className="text-white text-3xl mb-1">
+            $10
+          </div>
 
-<p>
-1. Open the bot by clicking on the BotFather message.
-</p>
+          <div className="text-gray-400 text-sm mb-6">
+            Remaining credits
+          </div>
 
-<p>
-2. Click the Start button to send a message to your bot.
-</p>
+          <button className="bg-white text-black px-6 py-2 rounded-lg">
+            Purchase credit →
+          </button>
 
-<p>
-3. Click the button below to confirm you sent the first message.
-</p>
+          <p className="text-gray-500 text-xs mt-6">
+            One time purchase. 10% fee.
+          </p>
 
-</div>
+        </div>
 
+      )}
 
-<button
-onClick={()=>alert("Message confirmed")}
-className="w-full text-black bg-gray-50 border-black py-3 rounded-lg"
->
+    </div>
 
-I have sent a message ✓
-
-</button>
-
-</div>
-
-)}
-
-</div>
-
-</div>
-
-)
+  );
 
 }
