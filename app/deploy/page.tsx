@@ -1,10 +1,22 @@
 "use client"
 
-import { useState } from "react"
-
+import { useState, useEffect } from "react"
 export default function DeployPage(){
 
 const [step,setStep] = useState(1)
+useEffect(()=>{
+
+if(step===2){
+
+setTimeout(()=>{
+
+setStep(3)
+
+},2000)
+
+}
+
+},[step])
 
 return(
 
@@ -33,12 +45,9 @@ Deploy
 
 </>
 )}
-
 {step===2 && (
 <>
-<h2>
-Starting deployment...
-</h2>
+<h2>Starting deployment...</h2>
 
 <button
 onClick={()=>setStep(3)}
