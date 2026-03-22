@@ -1,39 +1,39 @@
-import { redirect } from "next/navigation"
-import { getServerSession } from "next-auth"
-import { createClient } from "@supabase/supabase-js"
+"use client";
 
-export const dynamic = "force-dynamic"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-export default async function Dashboard() {
+export default function Dashboard(){
 
-  const session = await getServerSession()
+const router = useRouter();
 
-  // Agar login nahi hai
-  if (!session) {
-    redirect("/login")
-  }
+useEffect(()=>{
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+const paid =
+localStorage.getItem("is_paid");
 
-  // Subscription check
-  const { data } = await supabase
-    .from("subscriptions")
-    .select("*")
-    .eq("status", "active")
-    .eq("email", session.user?.email)
-    .maybeSingle()
+if(!paid){
 
-  if (!data) {
-    redirect("/checkout")
-  }
+router.push("/checkout");
 
-  return (
-    <div className="text-white p-10">
-      <h1 className="text-3xl">Dashboard</h1>
-      <p className="mt-4">Welcome to BuluClaw 🚀</p>
-    </div>
-  )
+}
+
+},[]);
+
+return (
+
+<div className="text-white text-center mt-20">
+
+<h1 className="text-3xl font-bold">
+Dashboard 🚀
+</h1>
+
+<p className="mt-4">
+Welcome to BuluClaw
+</p>
+
+</div>
+
+);
+
 }

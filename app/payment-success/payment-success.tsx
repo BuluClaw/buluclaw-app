@@ -9,11 +9,13 @@ const router = useRouter();
 
 useEffect(() => {
 
+localStorage.setItem("is_paid","true");
+
 setTimeout(()=>{
 
 router.push("/dashboard");
 
-},2000);
+},1500);
 
 },[]);
 
@@ -26,7 +28,7 @@ Payment Successful 🎉
 </h1>
 
 <p className="text-zinc-400 mt-3">
-Redirecting to dashboard...
+Activating your plan...
 </p>
 
 </div>
