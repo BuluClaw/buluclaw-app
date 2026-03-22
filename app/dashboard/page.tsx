@@ -61,7 +61,7 @@ Active ✅
 
 <button
 onClick={()=>{
-alert("Jarvis deploy coming next step")
+window.location.href="/deploy"
 }}
 className="w-full bg-white text-black py-2 rounded-lg"
 >
