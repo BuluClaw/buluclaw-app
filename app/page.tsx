@@ -1,13 +1,12 @@
 "use client";
-
-import { useState, useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useState, useEffect } from "react";
 import UseCasesMarquee from "./components/UseCasesMarquee";
 import { LogOut } from "lucide-react";
-
+import type { Session } from "next-auth";
 export default function Home() {
-  const { data: session } = useSession();
-
+ 
+const { data: session }: any = useSession();
   const [selectedModel, setSelectedModel] = useState("claude");
   const [selectedChannel, setSelectedChannel] = useState("");
  const [step, setStep] = useState<"select" | "telegram" | null>("select");
@@ -279,8 +278,32 @@ export default function Home() {
                 <div className="flex flex-col items-center gap-4">
 
                   {/* LOGIN BUTTON */}
-                  <button
-                    onClick={() => signIn("google")}
+
+<button
+  onClick={() => {
+
+    if(session?.user?.email){
+
+      localStorage.setItem(
+        "user_email",
+        session.user.email
+      );
+
+      window.location.href="/checkout";
+
+    } else {
+
+      signIn("google");
+
+    }
+
+  }}
+>
+⚡ Deploy OpenClaw
+</button>
+                
+    <button
+
                     className="flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-medium shadow-lg hover:scale-105 transition"
                   >
                     <img
