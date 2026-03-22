@@ -103,18 +103,10 @@ Follow these steps
 
 </div>
 
-<button
-onClick={()=>window.open("https://t.me/BotFather")}
-className="w-full bg-white text-black py-3 rounded-lg mb-4"
->
-
-Open BotFather
-
-</button>
 
 <button
 onClick={()=>alert("Message confirmed")}
-className="w-full bg-[#111827] border border-gray-700 py-3 rounded-lg"
+className="w-full bg-[#111827] border border-x-gray-200 py-3 rounded-lg"
 >
 
 I have sent a message ✓
