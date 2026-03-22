@@ -83,7 +83,7 @@ Connect your Telegram
 
 </div>
 
-<p className="text-gray-400 mb-6">
+<p className="text-gray-50 mb-6">
 Follow these steps
 </p>
 
@@ -106,7 +106,7 @@ Follow these steps
 
 <button
 onClick={()=>alert("Message confirmed")}
-className="w-full bg-[#111827] border border-x-gray-200 py-3 rounded-lg"
+className="w-full bg-neutral-100 border-x-gray-50 py-3 rounded-lg"
 >
 
 I have sent a message ✓
