@@ -1,116 +1,127 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react"
 
-export default function Dashboard() {
+export default function Dashboard(){
 
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+const [step,setStep] = useState(1)
 
-  function handleConnect() {
+useEffect(()=>{
 
-    setLoading(true);
+// step 1 → step 2
+setTimeout(()=>{
+setStep(2)
+},2500)
 
-    // 3 sec loader
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
-    }, 3000);
+// step 2 → success
+setTimeout(()=>{
+setStep(3)
+},5000)
 
-  }
+},[])
 
-  return (
+return(
 
-    <div className="min-h-screen flex items-center justify-center bg-[#070b14]">
+<div className="h-screen w-screen flex items-center justify-center bg-[#040612] text-white">
 
-      {!loading && !success && (
+<div className="w-full h-full flex flex-col items-center justify-center">
 
-        <div className="bg-[#0c1220] p-8 rounded-2xl w-[420px] text-center shadow-xl">
+{/* LOADER */}
+{step !== 3 && (
 
-          <h2 className="text-white text-xl mb-4">
-            Connect your Telegram
-          </h2>
+<>
+<div className="mb-8">
 
-          <p className="text-gray-400 text-sm mb-6">
+<div className="w-20 h-20 border-4 border-gray-700 border-t-white rounded-full animate-spin"/>
 
-            Follow these steps
+</div>
 
-            <br /><br />
+{step===1 && (
 
-           1. Open the bot by clicking on the BotFather message.
-            <br />
-          2. Click the Start button to send a message to your bot.
-            <br />
-            3. Click the button below to confirm you sent the first message.
-          </p>
+<div className="text-center">
 
-          <button
-            onClick={handleConnect}
-            className="w-full bg-white text-black py-3 rounded-lg font-medium"
-          >
-            I have sent a message ✓
-          </button>
+<h1 className="text-3xl font-semibold mb-3">
+Starting your deployment
+</h1>
 
-        </div>
+<p className="text-gray-400 text-lg">
+Do not switch other tabs. This only takes a few seconds.
+</p>
 
-      )}
+</div>
 
-      {loading && (
+)}
 
-        <div className="bg-[#0c1220] p-10 rounded-2xl w-[420px] text-center">
+{step===2 && (
 
-          <div className="animate-spin rounded-full h-10 w-10 border-2 border-white border-t-transparent mx-auto mb-4" />
+<div className="text-center">
 
-          <h2 className="text-white text-lg">
-            Pairing Telegram
-          </h2>
+<h1 className="text-3xl font-semibold mb-3">
+Pairing Telegram
+</h1>
 
-          <p className="text-gray-400 text-sm mt-2">
-            Connecting your bot. Hang tight...
-          </p>
+<p className="text-gray-400 text-lg">
+Connecting your bot. Hang tight...
+</p>
 
-        </div>
+</div>
 
-      )}
+)}
 
-      {success && (
+</>
 
-        <div className="bg-[#0c1220] p-10 rounded-2xl w-[420px] text-center">
+)}
 
-          <div className="text-green-400 text-4xl mb-3">
-            ✓
-          </div>
+{/* SUCCESS SCREEN */}
 
-          <h2 className="text-white text-lg mb-2">
-            Deployment success!
-          </h2>
+{step===3 && (
 
-          <p className="text-gray-400 text-sm mb-6">
-            Your bot is live. Use Telegram to chat.
-          </p>
+<div className="text-center">
 
-          <div className="text-white text-3xl mb-1">
-            $10
-          </div>
+<div className="text-green-400 text-5xl mb-6">
+✓
+</div>
 
-          <div className="text-gray-400 text-sm mb-6">
-            Remaining credits
-          </div>
+<h1 className="text-3xl font-semibold mb-2">
+Deployment success!
+</h1>
 
-          <button className="bg-white text-black px-6 py-2 rounded-lg">
-            Purchase credit →
-          </button>
+<p className="text-gray-400 mb-8">
+Your bot is live. Use your Telegram to chat; usage and credits are below.
+</p>
 
-          <p className="text-gray-500 text-xs mt-6">
-            One time purchase. 10% fee.
-          </p>
+<div className="text-5xl font-semibold mb-2">
+$10
+</div>
 
-        </div>
+<p className="text-gray-400 mb-8">
+Remaining credits
+</p>
 
-      )}
+<div className="bg-[#0b0f1d] px-6 py-3 rounded-lg mb-4">
+$0 used today • $0 used this month • $10 per month plan
+</div>
 
-    </div>
+<button className="bg-white text-black px-6 py-3 rounded-lg font-medium">
+Purchase credit →
+</button>
 
-  );
+<p className="text-gray-500 text-sm mt-6">
+One time purchase. 10% is charged as processing fees.
+</p>
+
+<p className="text-gray-500 text-sm mt-2">
+Too slow or memory issues? Contact
+</p>
+
+</div>
+
+)}
+
+</div>
+
+</div>
+
+)
 
 }
