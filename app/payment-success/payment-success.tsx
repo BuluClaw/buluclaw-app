@@ -1,48 +1,35 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function PaymentSuccess() {
+export default function PaymentSuccess(){
 
-  const router = useRouter();
-  const params = useSearchParams();
+const router = useRouter();
 
-  useEffect(() => {
+useEffect(() => {
 
-    const verify = async () => {
+setTimeout(()=>{
 
-      const razorpay_payment_id = params.get("razorpay_payment_id");
-      const razorpay_order_id = params.get("razorpay_order_id");
-      const razorpay_signature = params.get("razorpay_signature");
+router.push("/dashboard");
 
-      const user_id = localStorage.getItem("user_id");
+},2000);
 
-      await fetch("/api/verify-payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          razorpay_payment_id,
-          razorpay_order_id,
-          razorpay_signature,
-          user_id
-        })
-      });
+},[]);
 
-      router.push("/dashboard");
+return (
 
-    };
+<div className="text-white text-center mt-20">
 
-    verify();
+<h1 className="text-3xl font-bold">
+Payment Successful 🎉
+</h1>
 
-  }, []);
+<p className="text-zinc-400 mt-3">
+Redirecting to dashboard...
+</p>
 
-  return (
-    <div className="text-white text-center mt-20">
-      <h1 className="text-3xl">Payment Successful 🎉</h1>
-      <p>Setting up your account...</p>
-    </div>
-  );
+</div>
+
+);
 }
