@@ -7,6 +7,18 @@ import type { Session } from "next-auth";
 export default function Home() {
  
 const { data: session }: any = useSession();
+useEffect(() => {
+
+  if(session?.user?.email){
+
+    localStorage.setItem(
+      "user_email",
+      session.user.email
+    );
+
+  }
+
+}, [session]);
   const [selectedModel, setSelectedModel] = useState("claude");
   const [selectedChannel, setSelectedChannel] = useState("");
  const [step, setStep] = useState<"select" | "telegram" | null>("select");

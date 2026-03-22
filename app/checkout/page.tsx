@@ -6,17 +6,13 @@ export default function CheckoutPage() {
 
   useEffect(() => {
 
-    // google login se email milti hai
-    const email = localStorage.getItem("user_email");
+    const email =
+      localStorage.getItem("user_email");
 
     window.location.href =
-      `https://buy.polar.sh/polar_cl_yLgMYY3vkBYybBBnGsVQZH7urSahmg2GGfryl2n8cRC?email=${email}`;
+      `https://buy.polar.sh/polar_c_lTh19K9J4McsuNUUQsHw00r21gfTQy5KAkugY1u6Kdo?email=${email}`;
 
   }, []);
 
-  return (
-    <div className="h-screen flex items-center justify-center">
-      Redirecting to secure checkout...
-    </div>
-  );
+  return null;
 }
