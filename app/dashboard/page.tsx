@@ -106,7 +106,7 @@ Follow these steps
 
 <button
 onClick={()=>alert("Message confirmed")}
-className="w-full bg-gray-50 border-black py-3 rounded-lg"
+className="w-full text-black bg-gray-50 border-black py-3 rounded-lg"
 >
 
 I have sent a message ✓
