@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter,useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+
 export default function Dashboard(){
 
 const router = useRouter()
@@ -14,33 +15,38 @@ const [checkingPayment,setCheckingPayment] = useState(true)
 
 
 
-// PAYMENT CHECK
+// PAYMENT CHECK (FIXED)
 useEffect(()=>{
 
+// URL me payment success check karega
 const urlParams = new URLSearchParams(window.location.search)
 
-const paid = urlParams.get("paid")
+const paidFromURL = urlParams.get("paid")
 
-if(paid==="true"){
+// agar payment success URL se aayi
+if(paidFromURL==="true"){
 
-// payment success
-setCheckingPayment(false)
-
-// future visits ke liye save
 localStorage.setItem("paid","true")
 
-}else{
+setCheckingPayment(false)
 
-// check saved payment
-const savedPayment = localStorage.getItem("paid")
+return
 
-if(savedPayment==="true"){
+}
+
+// localStorage check
+const paidSaved = localStorage.getItem("paid")
+
+if(paidSaved==="true"){
 
 setCheckingPayment(false)
 
 }else{
 
-router.push("/checkout")
+// infinite loop prevent
+if(window.location.pathname==="/dashboard"){
+
+router.replace("/checkout")
 
 }
 
@@ -48,7 +54,9 @@ router.push("/checkout")
 
 },[])
 
-// existing animation
+
+
+// animation start only after payment check
 useEffect(()=>{
 
 if(checkingPayment) return
@@ -105,6 +113,7 @@ alert("Server error")
 
 
 
+// loading screen while checking payment
 if(checkingPayment){
 
 return(
@@ -234,7 +243,6 @@ Connecting your bot. Hang tight...
 
 
 {/* success */}
-
 {success && (
 
 <div className="w-[520px] bg-[#02050d] rounded-2xl p-12 text-center border border-[#0e1628] shadow-2xl">
