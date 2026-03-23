@@ -150,12 +150,13 @@ Connecting your bot. Hang tight...
 
 {success && (
 
-<div className="w-[460px] bg-[#070d1f] rounded-2xl p-10 text-center border border-[#0f1629]">
+<div className="w-[520px] bg-[#02050d] rounded-2xl p-12 text-center border border-[#0e1628] shadow-2xl">
 
+{/* green tick */}
 
-<div className="flex justify-center mb-5">
+<div className="flex justify-center mb-6">
 
-<div className="w-14 h-14 rounded-full bg-green-500/20 flex items-center justify-center">
+<div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center">
 
 <span className="text-green-400 text-2xl">
 
@@ -168,6 +169,8 @@ Connecting your bot. Hang tight...
 </div>
 
 
+{/* title */}
+
 <h2 className="text-xl font-medium mb-2">
 
 Deployment success!
@@ -175,29 +178,30 @@ Deployment success!
 </h2>
 
 
-<p className="text-gray-400 text-sm mb-8">
+<p className="text-gray-300 text-sm mb-10">
 
 Your bot is live. Use your Telegram to chat; usage and credits are below.
 
 </p>
 
 
+{/* price */}
 
-<div className="text-4xl mb-1 font-semibold">
+<div className="text-5xl font-semibold mb-2">
 
 $10
 
 </div>
 
 
-<div className="text-gray-400 text-sm mb-4">
+<div className="text-gray-300 text-sm mb-3">
 
 Remaining credits
 
 </div>
 
 
-<div className="text-gray-500 text-sm mb-8">
+<div className="text-white text-sm mb-10">
 
 $0 used today • $0 used this month • $10 per month plan
 
@@ -205,24 +209,59 @@ $0 used today • $0 used this month • $10 per month plan
 
 
 
-<button className="w-full bg-white text-black py-3 rounded-lg font-medium hover:bg-gray-200 transition">
+{/* purchase box */}
+
+<div className="flex gap-3 mb-6">
+
+<input
+
+value="$10"
+
+readOnly
+
+className="bg-[#060b18] border border-[#121a30] text-white px-4 py-3 rounded-lg w-full"
+
+/>
+
+
+<button className="bg-white text-black px-6 py-3 rounded-lg font-medium whitespace-nowrap">
 
 Purchase credit →
 
 </button>
 
 
+</div>
 
-<p className="text-gray-500 text-xs mt-6 leading-6">
+
+
+<p className="text-white text-xs mb-6">
 
 One time purchase. 10% is charged as processing fees.
 
-<br/><br/>
-
-Too slow or memory issues? Contact
-
 </p>
 
+
+
+<p className="text-white text-xs">
+
+Too slow or memory issues?
+
+{" "}
+
+<a
+
+href="mailto:support@buluclaw.com"
+
+className="underline"
+
+>
+
+support@buluclaw.com
+
+</a>
+
+</p>
 
 </div>
 
