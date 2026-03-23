@@ -15,7 +15,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true })
     }
 
-    // call Gemini AI (FREE)
     const aiRes = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + process.env.GEMINI_API_KEY,
       {
@@ -29,7 +28,7 @@ export async function POST(req: Request) {
               role: "user",
               parts: [
                 {
-                  text: `You are Jarvis AI assistant. Reply short, smart and helpful.
+                  text: `You are Jarvis AI assistant. Reply short and helpful.
 
 User message: ${message}`
                 }
@@ -42,13 +41,10 @@ User message: ${message}`
 
     const aiData = await aiRes.json()
 
-    console.log("ai response:", aiData)
-
     const reply =
       aiData?.candidates?.[0]?.content?.parts?.[0]?.text ||
       "Jarvis online 🤖"
 
-    // send message back to telegram
     await fetch(
       `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
@@ -67,7 +63,7 @@ User message: ${message}`
 
   } catch (err) {
 
-    console.log("ERROR:", err)
+    console.log(err)
 
     return NextResponse.json({ ok: false })
 
