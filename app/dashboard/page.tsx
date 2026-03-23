@@ -346,7 +346,7 @@ Too slow or memory issues?
 
 <a
 
-href="mailto:support@buluclaw.com"
+href="Contact"
 
 className="underline"
 
