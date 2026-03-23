@@ -1,66 +1,77 @@
 import { NextResponse } from "next/server"
 
-export async function POST(req: Request){
+export async function POST(req: Request) {
 
-const body = await req.json()
+  try {
 
-const message = body.message?.text
-const chatId = body.message?.chat?.id
+    const body = await req.json()
 
-if(!message) return NextResponse.json({ ok:true })
+    const message = body?.message?.text
+    const chatId = body?.message?.chat?.id
 
-// OpenAI call
-const ai = await fetch("https://api.openai.com/v1/chat/completions",{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Authorization":`Bearer ${process.env.OPENAI_API_KEY}`
-},
-body:JSON.stringify({
+    console.log("incoming msg:", message)
 
-model:"gpt-4o-mini",
+    if (!message) {
+      return NextResponse.json({ ok: true })
+    }
 
-messages:[
+    // call OpenAI
+    const aiRes = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are Jarvis AI assistant. Reply short, smart and helpful.",
+            },
+            {
+              role: "user",
+              content: message,
+            },
+          ],
+        }),
+      }
+    )
 
-{
-role:"system",
-content:"You are Jarvis, a smart AI assistant. Reply short, helpful, slightly futuristic."
-},
+    const aiData = await aiRes.json()
 
-{
-role:"user",
-content:message
-}
+    console.log("ai response:", aiData)
 
-]
+    const reply =
+      aiData?.choices?.[0]?.message?.content ||
+      "Jarvis online 🤖"
 
-})
-})
+    // send message back to telegram
+    await fetch(
+      `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: reply,
+        }),
+      }
+    )
 
-const data = await ai.json()
+    return NextResponse.json({ ok: true })
 
-const reply =
-data?.choices?.[0]?.message?.content ||
-"System online. How may I assist?"
+  } catch (err) {
 
-// send back to telegram
-await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,{
+    console.log("ERROR:", err)
 
-method:"POST",
+    return NextResponse.json({ ok: false })
 
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-chat_id:chatId,
-text:reply
-
-})
-
-})
-
-return NextResponse.json({ ok:true })
+  }
 
 }
