@@ -145,58 +145,89 @@ Connecting your bot. Hang tight...
 
 
 
-{/* STEP 5 success */}
+
+{/* SUCCESS */}
+
 {success && (
 
-<div className="bg-[#0c1220] p-10 rounded-2xl w-[420px] text-center">
+<div className="w-[460px] bg-[#070d1f] rounded-2xl p-10 text-center border border-[#0f1629]">
 
-<div className="text-green-400 text-5xl mb-4">
+
+<div className="flex justify-center mb-5">
+
+<div className="w-14 h-14 rounded-full bg-green-500/20 flex items-center justify-center">
+
+<span className="text-green-400 text-2xl">
+
 ✓
+
+</span>
+
 </div>
 
-<h2 className="text-xl mb-2">
+</div>
+
+
+<h2 className="text-xl font-medium mb-2">
+
 Deployment success!
+
 </h2>
 
-<p className="text-gray-400 mb-6">
+
+<p className="text-gray-400 text-sm mb-8">
+
 Your bot is live. Use your Telegram to chat; usage and credits are below.
+
 </p>
 
 
-<div className="text-4xl mb-2">
+
+<div className="text-4xl mb-1 font-semibold">
+
 $10
+
 </div>
 
-<div className="text-gray-400 mb-6">
+
+<div className="text-gray-400 text-sm mb-4">
+
 Remaining credits
+
 </div>
 
 
-<div className="text-sm text-gray-500 mb-4">
+<div className="text-gray-500 text-sm mb-8">
 
 $0 used today • $0 used this month • $10 per month plan
 
 </div>
 
 
-<button className="bg-white text-black px-6 py-3 rounded-lg w-full">
+
+<button className="w-full bg-white text-black py-3 rounded-lg font-medium hover:bg-gray-200 transition">
 
 Purchase credit →
 
 </button>
 
 
-<p className="text-xs text-gray-500 mt-6">
+
+<p className="text-gray-500 text-xs mt-6 leading-6">
 
 One time purchase. 10% is charged as processing fees.
-<br /><br />
+
+<br/><br/>
+
 Too slow or memory issues? Contact
 
 </p>
 
+
 </div>
 
 )}
+
 
 
 </div>
