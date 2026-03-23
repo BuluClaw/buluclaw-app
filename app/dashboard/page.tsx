@@ -1,15 +1,57 @@
 "use client"
 
 import { useEffect, useState } from "react"
-
+import { useRouter,useSearchParams } from "next/navigation"
 export default function Dashboard(){
+
+const router = useRouter()
 
 const [step,setStep] = useState(1)
 const [loading,setLoading] = useState(false)
 const [success,setSuccess] = useState(false)
-const [checking,setChecking] = useState(false) // NEW
+const [checking,setChecking] = useState(false)
+const [checkingPayment,setCheckingPayment] = useState(true)
 
+
+
+// PAYMENT CHECK
 useEffect(()=>{
+
+const urlParams = new URLSearchParams(window.location.search)
+
+const paid = urlParams.get("paid")
+
+if(paid==="true"){
+
+// payment success
+setCheckingPayment(false)
+
+// future visits ke liye save
+localStorage.setItem("paid","true")
+
+}else{
+
+// check saved payment
+const savedPayment = localStorage.getItem("paid")
+
+if(savedPayment==="true"){
+
+setCheckingPayment(false)
+
+}else{
+
+router.push("/checkout")
+
+}
+
+}
+
+},[])
+
+// existing animation
+useEffect(()=>{
+
+if(checkingPayment) return
 
 setTimeout(()=>{
 setStep(2)
@@ -19,18 +61,18 @@ setTimeout(()=>{
 setStep(3)
 },5000)
 
-},[])
+},[checkingPayment])
 
 
 
-// UPDATED FUNCTION
+
+// TELEGRAM CONNECT
 async function handleConnect(){
 
 setChecking(true)
 
 try{
 
-// backend check karega telegram message aaya ya nahi
 const res = await fetch("/api/check-telegram")
 
 const data = await res.json()
@@ -58,6 +100,22 @@ setChecking(false)
 alert("Server error")
 
 }
+
+}
+
+
+
+if(checkingPayment){
+
+return(
+
+<div className="h-screen w-screen flex items-center justify-center bg-black text-white">
+
+Checking payment...
+
+</div>
+
+)
 
 }
 
@@ -112,7 +170,7 @@ Do not switch other tabs. This only takes a few seconds.
 
 
 
-{/* STEP 3 connect screen */}
+{/* STEP 3 */}
 {step===3 && !loading && !success && (
 
 <div className="bg-[#0c1220] p-8 rounded-2xl w-[420px] text-center shadow-xl">
@@ -152,7 +210,7 @@ className="w-full bg-white text-black py-3 rounded-lg font-medium"
 
 
 
-{/* STEP 4 pairing loader */}
+{/* loading */}
 {loading && (
 
 <div className="text-center">
@@ -175,101 +233,18 @@ Connecting your bot. Hang tight...
 
 
 
-
-{/* SUCCESS */}
+{/* success */}
 
 {success && (
 
 <div className="w-[520px] bg-[#02050d] rounded-2xl p-12 text-center border border-[#0e1628] shadow-2xl">
 
-<div className="flex justify-center mb-6">
-
-<div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center">
-
-<span className="text-green-400 text-2xl">
-
-✓
-
-</span>
-
-</div>
-
-</div>
-
 <h2 className="text-xl font-medium mb-2">
-
 Deployment success!
-
 </h2>
 
-<p className="text-gray-300 text-sm mb-10">
-
-Your bot is live. Use your Telegram to chat; usage and credits are below.
-
-</p>
-
-<div className="text-5xl font-semibold mb-2">
-
-$10
-
-</div>
-
-<div className="text-gray-300 text-sm mb-3">
-
-Remaining credits
-
-</div>
-
-<div className="text-white text-sm mb-10">
-
-$0 used today • $0 used this month • $10 per month plan
-
-</div>
-
-<div className="flex gap-3 mb-6">
-
-<input
-
-value="$10"
-
-readOnly
-
-className="bg-[#060b18] border border-[#121a30] text-white px-4 py-3 rounded-lg w-full"
-
-/>
-
-<button className="bg-white text-black px-6 py-3 rounded-lg font-medium whitespace-nowrap">
-
-Purchase credit →
-
-</button>
-
-</div>
-
-<p className="text-white text-xs mb-6">
-
-One time purchase. 10% is charged as processing fees.
-
-</p>
-
-<p className="text-white text-xs">
-
-Too slow or memory issues?
-
-{" "}
-
-<a
-
-href="mailto:support@buluclaw.com"
-
-className="underline"
-
->
-
-support@buluclaw.com
-
-</a>
-
+<p className="text-gray-300 text-sm">
+Your bot is live.
 </p>
 
 </div>

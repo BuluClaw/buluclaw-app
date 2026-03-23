@@ -1,5 +1,22 @@
 import { NextResponse } from "next/server"
 
+const SYSTEM_PROMPT = `
+You are Jarvis AI, business assistant for BuluClaw users.
+
+Help users earn money online.
+Give practical ideas.
+Reply short.
+Use Hindi + English mix.
+
+Suggest:
+- freelancing
+- affiliate marketing
+- digital products
+- AI services
+- dropshipping
+- youtube automation
+`
+
 export async function POST(req: Request) {
 
   try {
@@ -9,7 +26,7 @@ export async function POST(req: Request) {
     const message = body?.message?.text
     const chatId = body?.message?.chat?.id
 
-    console.log("incoming msg:", message)
+    console.log("msg:", message)
 
     if (!message) {
       return NextResponse.json({ ok: true })
@@ -27,7 +44,7 @@ export async function POST(req: Request) {
             {
               parts: [
                 {
-                  text: `You are Jarvis AI assistant. Reply short and helpful.
+                  text: `${SYSTEM_PROMPT}
 
 User message: ${message}`
                 }
@@ -39,8 +56,6 @@ User message: ${message}`
     )
 
     const aiData = await aiRes.json()
-
-    console.log("Gemini response:", aiData)
 
     let reply = "Jarvis online 🤖"
 
@@ -66,7 +81,7 @@ User message: ${message}`
 
   } catch (error) {
 
-    console.log("ERROR:", error)
+    console.log(error)
 
     return NextResponse.json({ ok: false })
 
