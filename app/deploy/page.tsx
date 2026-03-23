@@ -31,7 +31,7 @@ Select Model
 </h2>
 
 <p className="text-gray-400">
-SimpleClaw style deploy
+BuluClaw style deploy
 </p>
 
 <button

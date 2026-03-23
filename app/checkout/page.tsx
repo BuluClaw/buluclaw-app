@@ -5,8 +5,8 @@ import { useEffect } from "react";
 export default function CheckoutPage() {
 
   useEffect(() => {
-    const paid =
-localStorage.getItem("is_paid");
+   
+const paid = localStorage.getItem("paid");
 
 if(paid){
  window.location.href="/dashboard";
