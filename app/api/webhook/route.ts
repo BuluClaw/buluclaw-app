@@ -15,28 +15,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true })
     }
 
-    // call OpenAI
+    // call Gemini AI (FREE)
     const aiRes = await fetch(
-      "https://api.openai.com/v1/chat/completions",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + process.env.GEMINI_API_KEY,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are Jarvis AI assistant. Reply short, smart and helpful.",
-            },
+          contents: [
             {
               role: "user",
-              content: message,
-            },
-          ],
+              parts: [
+                {
+                  text: `You are Jarvis AI assistant. Reply short, smart and helpful.
+
+User message: ${message}`
+                }
+              ]
+            }
+          ]
         }),
       }
     )
@@ -46,7 +45,7 @@ export async function POST(req: Request) {
     console.log("ai response:", aiData)
 
     const reply =
-      aiData?.choices?.[0]?.message?.content ||
+      aiData?.candidates?.[0]?.content?.parts?.[0]?.text ||
       "Jarvis online 🤖"
 
     // send message back to telegram
