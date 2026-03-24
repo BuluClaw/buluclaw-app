@@ -6,8 +6,9 @@ export async function POST(req: Request) {
 
     const { token } = await req.json()
 
-   const webhookUrl =
- `https://buluclaw.com/api/webhook?token=${token}`
+
+ const webhookUrl =
+`https://www.buluclaw.com/api/webhook/${token}`
 
     await fetch(
       `https://api.telegram.org/bot${token}/setWebhook`,
