@@ -1,36 +1,56 @@
 import { NextResponse } from "next/server"
 
-export async function POST(req: Request) {
+export async function POST(req: Request){
 
-  try {
+  try{
 
+    // token request se aayega
     const { token } = await req.json()
 
+    if(!token){
+      return NextResponse.json({
+        success:false
+      })
+    }
 
- const webhookUrl =
-`https://www.buluclaw.com/api/webhook/${token}`
+    const webhookUrl =
+      `https://buluclaw.com/api/webhook/${token}`
 
     await fetch(
+
       `https://api.telegram.org/bot${token}/setWebhook`,
+
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
         },
+
         body: JSON.stringify({
-          url: webhookUrl,
-        }),
+
+          url: webhookUrl
+
+        })
+
       }
+
     )
 
     return NextResponse.json({
-      success: true,
+
+      success:true
+
     })
 
-  } catch (error) {
+  }catch(err){
+
+    console.log(err)
 
     return NextResponse.json({
-      success: false,
+
+      success:false
+
     })
 
   }
