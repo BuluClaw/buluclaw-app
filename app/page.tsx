@@ -351,10 +351,10 @@ const connectTelegram = async () => {
 
 </button>
                 
-    <button
-
-                    className="flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-medium shadow-lg hover:scale-105 transition"
-                  >
+   <button
+ onClick={() => signIn("google")}
+ className="flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-medium shadow-lg hover:scale-105 transition"
+>
                     <img
                       src="https://www.svgrepo.com/show/475656/google-color.svg"
                       alt="google"
