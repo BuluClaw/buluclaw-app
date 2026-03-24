@@ -345,16 +345,11 @@ Too slow or memory issues?
 {" "}
 
 <a
-
-href="Contact"
-
-className="underline"
-
->
-
-support@buluclaw.com
-
-</a>
+          href="mailto:support@buluclaw.com"
+          className="underline underline-offset-4 hover:text-white pointer-events-auto"
+        >
+          Contact Support
+        </a>
 
 </p>
 

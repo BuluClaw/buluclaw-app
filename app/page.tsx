@@ -40,54 +40,91 @@ useEffect(() => {
     document.body.appendChild(script);
   }, []);
 
-  const connectTelegram = async () => {
-    if (!token) {
-      setStatus({
-        type: "error",
-        message: "Please enter bot token",
-      });
-      return;
+
+
+const connectTelegram = async () => {
+
+  if (!token) {
+    setStatus({
+      type: "error",
+      message: "Please enter bot token",
+    });
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+
+    // STEP A — save token DB me
+    const saveRes = await fetch("/api/save-telegram-token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token,
+        email: localStorage.getItem("user_email"),
+      }),
+    });
+
+    const saveData = await saveRes.json();
+
+    if (!saveData.success) {
+      throw new Error("Token save failed");
     }
 
-    setLoading(true);
 
-    try {
-      const res = await fetch("/api/telegram", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token }),
+    // STEP B — webhook connect
+    const connectRes = await fetch("/api/connect-bot", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token,
+      }),
+    });
+
+    const connectData = await connectRes.json();
+
+
+    if (connectData.success) {
+
+      setTelegramConnected(true);
+
+      setStatus({
+        type: "success",
+        message: "Bot connected successfully 🤖",
       });
 
-      const data = await res.json();
+      setTimeout(() => setStatus(null), 4000);
 
-      if (data.success) {
-        setTelegramConnected(true);
-        setBotInfo(data.bot);
-        setStep("select");
+      setStep(null);
 
-        setStatus({
-          type: "success",
-          message: "Telegram connected successfully 🚀",
-        });
+    } else {
 
-        setTimeout(() => setStatus(null), 4000);
-      } else {
-        setStatus({
-          type: "error",
-          message: "Invalid token, please try again.",
-        });
-      }
-    } catch (error) {
       setStatus({
         type: "error",
-        message: "Server error. Please try again.",
+        message: "Bot connect failed",
       });
+
     }
 
-    setLoading(false);
-  };
+  } catch (err) {
+
+    setStatus({
+      type: "error",
+      message: "Server error",
+    });
+
+  }
+
+  setLoading(false);
+
+};
+
+
     return (
 <div className="min-h-screen text-white px-4 md:px-6 py-6 md:py-10 flex flex-col items-center bg-gradient-to-b from-black via-[#0b1120] to-black">
 
@@ -311,7 +348,7 @@ useEffect(() => {
 
   }}
 >
-⚡ Deploy OpenClaw
+
 </button>
                 
     <button

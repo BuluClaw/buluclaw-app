@@ -19,72 +19,86 @@ Suggest:
 
 export async function POST(req: Request) {
 
-  try {
+try {
 
-    const body = await req.json()
+const url = new URL(req.url)
 
-    const message = body?.message?.text
-    const chatId = body?.message?.chat?.id
+// token url se ayega
+const botToken = url.searchParams.get("token")
 
-    console.log("msg:", message)
+const body = await req.json()
 
-    if (!message) {
-      return NextResponse.json({ ok: true })
-    }
+const message = body?.message?.text
+const chatId = body?.message?.chat?.id
 
-    const aiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: `${SYSTEM_PROMPT}
+if(!message) return NextResponse.json({ ok:true })
+
+
+// AI call
+const aiRes = await fetch(
+`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+
+contents:[
+{
+parts:[
+{
+text: `${SYSTEM_PROMPT}
 
 User message: ${message}`
-                }
-              ]
-            }
-          ]
-        }),
-      }
-    )
+}
+]
+}
+]
 
-    const aiData = await aiRes.json()
+})
+}
+)
 
-    let reply = "Jarvis online 🤖"
+const aiData = await aiRes.json()
 
-    if (aiData?.candidates?.[0]?.content?.parts?.[0]?.text) {
-      reply = aiData.candidates[0].content.parts[0].text
-    }
+let reply = "Jarvis online 🤖"
 
-    await fetch(
-      `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: reply,
-        }),
-      }
-    )
+if(aiData?.candidates?.[0]?.content?.parts?.[0]?.text){
 
-    return NextResponse.json({ ok: true })
+reply = aiData.candidates[0].content.parts[0].text
 
-  } catch (error) {
+}
 
-    console.log(error)
 
-    return NextResponse.json({ ok: false })
+// reply user bot par jayega
+await fetch(
 
-  }
+`https://api.telegram.org/bot${botToken}/sendMessage`,
+
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+
+chat_id: chatId,
+text: reply
+
+})
+}
+
+)
+
+return NextResponse.json({ ok:true })
+
+}catch(err){
+
+console.log(err)
+
+return NextResponse.json({ ok:false })
+
+}
 
 }
