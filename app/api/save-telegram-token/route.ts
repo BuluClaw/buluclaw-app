@@ -5,18 +5,26 @@ export async function POST(req: Request) {
 
   try {
 
-    const { token } = await req.json()
+    const body = await req.json()
+    const token = body.token
 
- const supabase = await createClient()
+    if(!token){
+      return NextResponse.json({ ok:false, error:"no token" })
+    }
 
-    const { data:{ user } } = await supabase.auth.getUser()
+    const supabase = await createClient()
 
-    if(!user){
+    const {
+      data: { user },
+      error: userError
+    } = await supabase.auth.getUser()
+
+    if(userError || !user){
+      console.log("no user", userError)
       return NextResponse.json({ ok:false })
     }
 
-    // UPSERT = create if not exist
-    await supabase
+    const { error } = await supabase
       .from("users")
       .upsert({
         id: user.id,
@@ -24,11 +32,16 @@ export async function POST(req: Request) {
         telegram_token: token
       })
 
+    if(error){
+      console.log("db error", error)
+      return NextResponse.json({ ok:false })
+    }
+
     return NextResponse.json({ ok:true })
 
   } catch (err) {
 
-    console.log(err)
+    console.log("server error", err)
 
     return NextResponse.json({ ok:false })
 
