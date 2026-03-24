@@ -3,19 +3,35 @@ import { createClient } from "@/utils/supabase/server"
 
 export async function POST(req: Request) {
 
-const { token } = await req.json()
+  try {
 
-const supabase = await createClient()
+    const { token } = await req.json()
 
-const { data:{user} } = await supabase.auth.getUser()
+ const supabase = await createClient()
 
-if(!user) return NextResponse.json({ok:false})
+    const { data:{ user } } = await supabase.auth.getUser()
 
-await supabase
-.from("users")
-.update({ telegram_token: token })
-.eq("id",user.id)
+    if(!user){
+      return NextResponse.json({ ok:false })
+    }
 
-return NextResponse.json({ok:true})
+    // UPSERT = create if not exist
+    await supabase
+      .from("users")
+      .upsert({
+        id: user.id,
+        email: user.email,
+        telegram_token: token
+      })
+
+    return NextResponse.json({ ok:true })
+
+  } catch (err) {
+
+    console.log(err)
+
+    return NextResponse.json({ ok:false })
+
+  }
 
 }
