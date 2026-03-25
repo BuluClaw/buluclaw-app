@@ -8,7 +8,7 @@ const supabase = createClient(
 
 export async function POST(
  req: Request,
- context: { params: { token: string } }
+ context: any
 ){
 
  try{
@@ -27,11 +27,7 @@ export async function POST(
 
   if(!chatId || !userMessage){
 
-   return NextResponse.json({
-
-    ok:true
-
-   })
+   return NextResponse.json({ ok:true })
 
   }
 
@@ -48,15 +44,11 @@ export async function POST(
 
    console.log("user not found")
 
-   return NextResponse.json({
-
-    ok:true
-
-   })
+   return NextResponse.json({ ok:true })
 
   }
 
-  // AI RESPONSE (Gemini)
+  // GEMINI AI
 
   const aiResponse =
    await fetch(
@@ -122,22 +114,15 @@ export async function POST(
 
   )
 
-  return NextResponse.json({
-
-   ok:true
-
-  })
+  return NextResponse.json({ ok:true })
 
  }catch(err){
 
   console.log(err)
 
   return NextResponse.json(
-
    { ok:false },
-
    { status:500 }
-
   )
 
  }
