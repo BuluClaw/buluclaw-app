@@ -1,12 +1,12 @@
 "use client";
-import { useSession, signIn, signOut } from "next-auth/react";
+
 import { useState, useEffect } from "react";
 import UseCasesMarquee from "./components/UseCasesMarquee";
 import { LogOut } from "lucide-react";
 
 export default function Home() {
  
-const { data: session }: any = useSession();
+const session = null;
 useEffect(() => {
 
   if(session?.user?.email){
