@@ -9,6 +9,33 @@ export default function Home() {
 
 const { data: session } = useSession();
 useEffect(() => {
+  useEffect(() => {
+
+  const checkTelegramStatus = async () => {
+
+    try {
+
+      const res = await fetch("/api/check-telegram")
+
+      const data = await res.json()
+
+      if (data.connected === true) {
+
+        setTelegramConnected(true)
+
+      }
+
+    } catch (err) {
+
+      console.log("telegram check error", err)
+
+    }
+
+  }
+
+  checkTelegramStatus()
+
+}, [])
 
  
     if((session as any)?.user?.email){
@@ -223,6 +250,7 @@ const connectTelegram = async () => {
         <button
           onClick={connectTelegram}
           disabled={loading}
+          
           className="bg-white text-black font-medium px-6 py-3 rounded-xl hover:opacity-90 transition"
         >
           {loading ? "Connecting..." : "Save & Connect"}
@@ -385,7 +413,8 @@ const connectTelegram = async () => {
                   {/* DEPLOY BUTTON */}
                   <button
                     onClick={() => window.location.href = "/checkout"}
-                    disabled={!telegramConnected || loading}
+                    
+                    disabled={!session || !telegramConnected}
                     className={`px-8 py-4 rounded-2xl font-medium text-lg transition ${
                       telegramConnected
                         ? "bg-white text-black hover:scale-105"
