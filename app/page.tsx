@@ -68,15 +68,21 @@ const connectTelegram = async () => {
 
 
     // STEP B — webhook connect
-    const connectRes = await fetch("/api/connect-bot", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token,
-      }),
-    });
+const connectRes = await fetch("/api/set-webhook", {
+
+ method: "POST",
+
+ headers: {
+  "Content-Type": "application/json"
+ },
+
+ body: JSON.stringify({
+
+  bot_token: token
+
+ })
+
+})
 
     const connectData = await connectRes.json();
 
