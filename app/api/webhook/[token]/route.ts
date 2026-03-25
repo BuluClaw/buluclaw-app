@@ -2,22 +2,29 @@ import { NextResponse } from "next/server"
 
 export async function POST(
  req: Request,
- context: { params: { token: string } }
+ context: any
 ) {
 
  try {
 
-  const { token } = context.params
+  const token =
+   context.params.token
 
-  const body = await req.json()
+  const body =
+   await req.json()
 
-  console.log("telegram message:", body)
+  console.log(
+   "telegram message:",
+   body
+  )
 
   const chatId =
    body?.message?.chat?.id
 
   if (!chatId) {
-   return NextResponse.json({ ok: true })
+   return NextResponse.json({
+    ok: true
+   })
   }
 
   const text =
@@ -33,7 +40,8 @@ You can now send commands.`
    {
     method: "POST",
     headers: {
-     "Content-Type": "application/json"
+     "Content-Type":
+      "application/json"
     },
     body: JSON.stringify({
      chat_id: chatId,
@@ -42,7 +50,9 @@ You can now send commands.`
    }
   )
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({
+   ok: true
+  })
 
  } catch (err) {
 
