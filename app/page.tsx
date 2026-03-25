@@ -24,49 +24,6 @@ useEffect(() => {
   const [selectedChannel, setSelectedChannel] = useState("");
  const [step, setStep] = useState<"select" | "telegram" | null>("select");
   const [telegramConnected, setTelegramConnected] = useState(false);
-
-
-
-
-
-
-
-useEffect(() => {
-
-  const checkTelegramStatus = async () => {
-
-    try {
-
-      const res = await fetch("/api/check-telegram");
-
-      const data = await res.json();
-
-      if (data.connected === true) {
-
-        setTelegramConnected(true);
-
-      }
-
-    } catch (err) {
-
-      console.log("telegram check failed");
-
-    }
-
-  };
-
-  checkTelegramStatus();
-
-}, []);
-
-
-
-
-
-
-
-
-
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<null | { type: "success" | "error"; message: string }>(
     null
