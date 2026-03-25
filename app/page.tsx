@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import UseCasesMarquee from "./components/UseCasesMarquee";
 import { LogOut } from "lucide-react";
 import type { Session } from "next-auth";
+
 export default function Home() {
 
-const { data: session } = useSession() ?? { data: null };
+const { data: session } = useSession();
 useEffect(() => {
 
  

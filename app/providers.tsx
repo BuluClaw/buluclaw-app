@@ -1,5 +1,6 @@
 "use client"
 
+import { SessionProvider } from "next-auth/react"
 import { createClient } from "@supabase/supabase-js"
 import { createContext, useContext } from "react"
 
@@ -14,8 +15,10 @@ export const useSupabase = () => useContext(SupabaseContext)
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <SupabaseContext.Provider value={supabase}>
-      {children}
-    </SupabaseContext.Provider>
+    <SessionProvider>
+      <SupabaseContext.Provider value={supabase}>
+        {children}
+      </SupabaseContext.Provider>
+    </SessionProvider>
   )
 }
