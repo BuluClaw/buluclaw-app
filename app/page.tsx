@@ -5,15 +5,17 @@ import UseCasesMarquee from "./components/UseCasesMarquee";
 import { LogOut } from "lucide-react";
 import type { Session } from "next-auth";
 export default function Home() {
- 
-const { data: session }: any = useSession();
+
+const { data: session } = useSession() ?? { data: null };
 useEffect(() => {
 
-  if(session?.user?.email){
+ 
+    if((session as any)?.user?.email){
 
     localStorage.setItem(
       "user_email",
-      session.user.email
+     
+      (session as any).user.email
     );
 
   }
@@ -323,12 +325,15 @@ const connectTelegram = async () => {
 <button
   onClick={() => {
 
-    if(session?.user?.email){
+    
+      if((session as any)?.user?.email){
+    
 
       localStorage.setItem(
         "user_email",
-        session.user.email
+      (session as any).user.email
       );
+     
 
       window.location.href="/checkout";
 
