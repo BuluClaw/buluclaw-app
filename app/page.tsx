@@ -8,34 +8,9 @@ import type { Session } from "next-auth";
 export default function Home() {
 
 const { data: session } = useSession();
+
+  
 useEffect(() => {
-  useEffect(() => {
-
-  const checkTelegramStatus = async () => {
-
-    try {
-
-      const res = await fetch("/api/check-telegram")
-
-      const data = await res.json()
-
-      if (data.connected === true) {
-
-        setTelegramConnected(true)
-
-      }
-
-    } catch (err) {
-
-      console.log("telegram check error", err)
-
-    }
-
-  }
-
-  checkTelegramStatus()
-
-}, [])
 
  
     if((session as any)?.user?.email){
