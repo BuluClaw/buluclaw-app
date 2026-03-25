@@ -1,18 +1,14 @@
 "use client";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
+
 import UseCasesMarquee from "./components/UseCasesMarquee";
 import { LogOut } from "lucide-react";
 import type { Session } from "next-auth";
 
 export default function Home() {
-
-const { data: session } = useSession();
-
-  
+const { data: session } = useSession(); 
 useEffect(() => {
-
- 
     if((session as any)?.user?.email){
 
     localStorage.setItem(
@@ -28,6 +24,48 @@ useEffect(() => {
   const [selectedChannel, setSelectedChannel] = useState("");
  const [step, setStep] = useState<"select" | "telegram" | null>("select");
   const [telegramConnected, setTelegramConnected] = useState(false);
+
+
+
+
+
+
+
+useEffect(() => {
+
+  const checkTelegramStatus = async () => {
+
+    try {
+
+      const res = await fetch("/api/check-telegram");
+
+      const data = await res.json();
+
+      if (data.connected === true) {
+
+        setTelegramConnected(true);
+
+      }
+
+    } catch (err) {
+
+      console.log("telegram check failed");
+
+    }
+
+  };
+
+  checkTelegramStatus();
+
+}, []);
+
+
+
+
+
+
+
+
 
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<null | { type: "success" | "error"; message: string }>(
