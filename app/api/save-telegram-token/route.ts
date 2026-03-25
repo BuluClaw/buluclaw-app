@@ -1,51 +1,54 @@
-import { NextResponse } from "next/server"
-import { createClient } from "@/utils/supabase/server"
+import { createClient } from "@supabase/supabase-js"
+
+const supabase = createClient(
+ process.env.NEXT_PUBLIC_SUPABASE_URL!,
+ process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 export async function POST(req: Request) {
 
-  try {
+ try {
 
-    const { token } = await req.json()
+   const body = await req.json()
 
-    if (!token) {
-      return NextResponse.json({ ok:false, error:"token missing" })
-    }
+   const { token, email } = body
 
-    const supabase = await createClient()
+   if (!token || !email) {
 
-    const {
-      data: { user },
-      error: authError
-    } = await supabase.auth.getUser()
+     return Response.json(
+       { success: false, error: "missing data" },
+       { status: 400 }
+     )
 
-    if (authError || !user) {
-      return NextResponse.json({
-        ok:false,
-        error:"not logged in"
-      })
-    }
+   }
 
-    const { error } = await supabase
-      .from("users")
-      .upsert({
-        id: user.id,
-        email: user.email,
-        telegram_token: token
-      })
+   const { error } = await supabase
+     .from("telegram_connections")
+     .upsert({
+       email: email,
+       bot_token: token
+     })
 
-    if (error) {
-      console.log(error)
-      return NextResponse.json({ ok:false })
-    }
+   if (error) {
 
-    return NextResponse.json({ ok:true })
+     return Response.json(
+       { success: false, error },
+       { status: 500 }
+     )
 
-  } catch (err) {
+   }
 
-    console.log(err)
+   return Response.json({
+     success: true
+   })
 
-    return NextResponse.json({ ok:false })
+ } catch (err) {
 
-  }
+   return Response.json(
+     { success: false },
+     { status: 500 }
+   )
+
+ }
 
 }
