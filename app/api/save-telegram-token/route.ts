@@ -11,20 +11,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok:false, error:"token missing" })
     }
 
-    // IMPORTANT
     const supabase = await createClient()
 
-    // get logged user
-    const { data, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError
+    } = await supabase.auth.getUser()
 
-    if (authError || !data?.user) {
-      console.log("auth error", authError)
-      return NextResponse.json({ ok:false })
+    if (authError || !user) {
+      return NextResponse.json({
+        ok:false,
+        error:"not logged in"
+      })
     }
 
-    const user = data.user
-
-    // save token
     const { error } = await supabase
       .from("users")
       .upsert({
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       })
 
     if (error) {
-      console.log("DB ERROR", error)
+      console.log(error)
       return NextResponse.json({ ok:false })
     }
 
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
 
   } catch (err) {
 
-    console.log("SERVER ERROR", err)
+    console.log(err)
 
     return NextResponse.json({ ok:false })
 
