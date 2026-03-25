@@ -8,14 +8,16 @@ const supabase = createClient(
 
 export async function POST(
  req: Request,
- { params }: { params: { token: string } }
-) {
+ context: { params: { token: string } }
+){
 
- try {
+ try{
 
-  const token = params.token
+  const token =
+   context.params.token
 
-  const body = await req.json()
+  const body =
+   await req.json()
 
   const chatId =
    body?.message?.chat?.id
@@ -23,9 +25,13 @@ export async function POST(
   const userMessage =
    body?.message?.text
 
-  if (!chatId || !userMessage) {
+  if(!chatId || !userMessage){
 
-   return NextResponse.json({ ok:true })
+   return NextResponse.json({
+
+    ok:true
+
+   })
 
   }
 
@@ -38,21 +44,25 @@ export async function POST(
     .eq("bot_token", token)
     .single()
 
-  if (!data) {
+  if(!data){
 
    console.log("user not found")
 
-   return NextResponse.json({ ok:true })
+   return NextResponse.json({
+
+    ok:true
+
+   })
 
   }
 
-  // AI RESPONSE
+  // AI RESPONSE (Gemini)
 
   const aiResponse =
    await fetch(
 
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" +
-     process.env.GEMINI_API_KEY,
+    process.env.GEMINI_API_KEY,
 
     {
 
@@ -87,7 +97,7 @@ export async function POST(
    aiData?.candidates?.[0]?.content?.parts?.[0]?.text
    || "AI error"
 
-  // SEND REPLY
+  // SEND TELEGRAM MESSAGE
 
   await fetch(
 
@@ -112,9 +122,13 @@ export async function POST(
 
   )
 
-  return NextResponse.json({ ok:true })
+  return NextResponse.json({
 
- } catch (err) {
+   ok:true
+
+  })
+
+ }catch(err){
 
   console.log(err)
 
