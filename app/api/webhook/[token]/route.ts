@@ -13,45 +13,82 @@ export async function POST(
   const body =
    await req.json()
 
-  console.log(
-   "telegram message:",
-   body
-  )
-
   const chatId =
    body?.message?.chat?.id
 
-  if (!chatId) {
+  const userMessage =
+   body?.message?.text
+
+  if (!chatId || !userMessage) {
+
    return NextResponse.json({
-    ok: true
+    ok:true
    })
+
   }
 
-  const text =
-`OpenClaw connected ✅
+  // GEMINI AI CALL
 
-Your chat id:
-${chatId}
+  const aiResponse =
+   await fetch(
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
+     process.env.GEMINI_API_KEY,
+    {
+     method:"POST",
+     headers:{
+      "Content-Type":"application/json"
+     },
+     body:JSON.stringify({
 
-You can now send commands.`
+      contents:[
+       {
+        parts:[
+         {
+          text:userMessage
+         }
+        ]
+       }
+      ]
+
+     })
+    }
+   )
+
+  const aiData =
+   await aiResponse.json()
+
+  const reply =
+   aiData?.candidates?.[0]?.content?.parts?.[0]?.text
+   || "AI error"
+
+  // SEND BACK TO TELEGRAM
 
   await fetch(
+
    `https://api.telegram.org/bot${token}/sendMessage`,
+
    {
-    method: "POST",
-    headers: {
-     "Content-Type":
-      "application/json"
+    method:"POST",
+
+    headers:{
+     "Content-Type":"application/json"
     },
-    body: JSON.stringify({
-     chat_id: chatId,
-     text
+
+    body:JSON.stringify({
+
+     chat_id:chatId,
+     text:reply
+
     })
+
    }
+
   )
 
   return NextResponse.json({
-   ok: true
+
+   ok:true
+
   })
 
  } catch (err) {
@@ -59,8 +96,11 @@ You can now send commands.`
   console.log(err)
 
   return NextResponse.json(
-   { ok: false },
-   { status: 500 }
+
+   { ok:false },
+
+   { status:500 }
+
   )
 
  }
