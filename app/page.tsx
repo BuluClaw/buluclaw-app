@@ -25,6 +25,7 @@ useEffect(() => {
  const [step, setStep] = useState<"select" | "telegram" | null>("select");
   const [telegramConnected, setTelegramConnected] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [connected,setConnected] = useState(false)
   const [status, setStatus] = useState<null | { type: "success" | "error"; message: string }>(
     null
   );
@@ -32,6 +33,12 @@ useEffect(() => {
   const [botInfo, setBotInfo] = useState<any>(null);
 
   const [token, setToken] = useState("");
+
+
+
+
+
+
 
 const connectTelegram = async () => {
 
@@ -45,28 +52,38 @@ const connectTelegram = async () => {
 
    headers:{
     "Content-Type":"application/json"
-
    },
 
    body:JSON.stringify({
-
     token
-
    })
 
   })
 
-
   const data = await res.json()
+  
+  if(data.success){
 
+ setTelegramConnected(true)
+ setConnected(true)
+
+ setTimeout(()=>{
+
+  setConnected(false)
+
+ },5000)
+
+}
 
   if(data.success){
 
-   alert("Token saved successfully")
+   setConnected(true)
 
-  }else{
+   setTimeout(()=>{
 
-   alert("Failed to save token")
+    setConnected(false)
+
+   },5000)
 
   }
 
@@ -74,14 +91,17 @@ const connectTelegram = async () => {
 
   console.log(err)
 
-  alert("Error saving token")
-
  }
 
  setLoading(false)
 
 }
-  
+
+
+
+
+
+
     return (
 <div className="min-h-screen text-white px-4 md:px-6 py-6 md:py-10 flex flex-col items-center bg-gradient-to-b from-black via-[#0b1120] to-black">
 
@@ -365,6 +385,19 @@ const connectTelegram = async () => {
                       <span className="text-blue-400"> Limited cloud servers — only 11 left</span>
                     </p>
                   )}
+
+
+{connected && (
+
+<div className="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-4 rounded-xl shadow-xl">
+
+ Telegram connected
+ <br/>
+ Your bot is now linked. You are ready to send & receive messages.
+
+</div>
+
+)}
 
                   {/* USER CARD */}
                   <div className="w-full max-w-md flex items-center bg-zinc-900 rounded-2xl px-6 py-4 shadow-lg gap-4 mt-6">
