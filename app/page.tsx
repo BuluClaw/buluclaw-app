@@ -33,54 +33,52 @@ useEffect(() => {
 
   const [token, setToken] = useState("");
 
-
 const connectTelegram = async () => {
 
  try{
 
-  const saveRes = await fetch("/api/save-telegram-token",{
+  setLoading(true)
+
+  const res = await fetch("/api/connect-bot",{
 
    method:"POST",
 
    headers:{
     "Content-Type":"application/json"
+
    },
 
    body:JSON.stringify({
 
-    token,
-    email: localStorage.getItem("user_email")
+    token
 
    })
 
   })
 
 
-  const saveData =
-   await saveRes.json()
+  const data = await res.json()
 
 
-  if(!saveData.success){
+  if(data.success){
 
-   throw new Error("Token save failed")
+   alert("Token saved successfully")
+
+  }else{
+
+   alert("Failed to save token")
 
   }
 
+ }catch(err){
 
-  localStorage.setItem(
-   "telegram_token",
-   token
-  )
+  console.log(err)
 
-
-  alert("Telegram connected")
+  alert("Error saving token")
 
  }
- catch(err){
 
-  alert("Error connecting bot")
-
- }
+ setLoading(false)
 
 }
   
