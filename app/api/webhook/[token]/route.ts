@@ -8,13 +8,13 @@ const supabase = createClient(
 
 export async function POST(
  request: Request,
- context: { params: { token: string } }
+ { params }: { params: { token: string } }
 ){
 
  try{
 
   const token =
-   context.params.token
+   params.token
 
   const body =
    await request.json()
@@ -32,8 +32,6 @@ export async function POST(
   }
 
 
-  // get user AI settings
-
   const { data:user } =
    await supabase
     .from("telegram_connections")
@@ -49,31 +47,28 @@ export async function POST(
     .single()
 
 
-  if(!user){
 
-   console.log("user not found")
+  if(!user){
 
    return NextResponse.json({ ok:true })
 
   }
 
 
-  const ai =
-   user.ai_settings[0]
 
+  const ai =
+   user.ai_settings?.[0]
 
   const apiKey =
-   ai.api_key
+   ai?.api_key
 
   const model =
-   ai.model || "gemini-2.5-flash"
+   ai?.model || "gemini-1.5-flash"
 
   const systemPrompt =
-   ai.prompt || "You are helpful assistant"
+   ai?.prompt || "You are helpful assistant"
 
 
-
-  // call AI
 
   const aiResponse =
    await fetch(
@@ -119,8 +114,6 @@ export async function POST(
    || "AI error"
 
 
-
-  // send telegram reply
 
   await fetch(
 
