@@ -4,26 +4,30 @@ export async function POST(req: Request){
 
  try{
 
-  const { bot_token } =
+  const body =
    await req.json()
 
-  const webhookUrl =
-   `https://www.buluclaw.com/api/webhook/${bot_token}`
+  const token =
+   body.bot_token
 
-  const tg =
+  const webhookUrl =
+   process.env.NEXT_PUBLIC_BASE_URL +
+   "/api/webhook/" +
+   token
+
+  const res =
    await fetch(
 
-    `https://api.telegram.org/bot${bot_token}/setWebhook?url=${webhookUrl}`
+    `https://api.telegram.org/bot${token}/setWebhook?url=${webhookUrl}`
 
    )
 
   const data =
-   await tg.json()
+   await res.json()
 
   return NextResponse.json({
 
-   ok:true,
-   telegram:data
+   success:data.ok
 
   })
 
@@ -31,7 +35,7 @@ export async function POST(req: Request){
 
   return NextResponse.json({
 
-   ok:false
+   success:false
 
   })
 

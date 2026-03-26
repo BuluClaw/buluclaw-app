@@ -25,22 +25,30 @@ export async function POST(
   const userMessage =
    body?.message?.text
 
+  // agar message empty ho to ignore
   if(!chatId || !userMessage){
 
    return NextResponse.json({ ok:true })
 
   }
 
-  // CHECK USER EXISTS
+  // USER + AI SETTINGS FETCH
 
-  const { data } =
+  const { data:user } =
    await supabase
     .from("telegram_connections")
-    .select("*")
+    .select(`
+     user_id,
+     ai_settings (
+      api_key,
+      model,
+      prompt
+     )
+    `)
     .eq("bot_token", token)
     .single()
 
-  if(!data){
+  if(!user){
 
    console.log("user not found")
 
@@ -48,13 +56,29 @@ export async function POST(
 
   }
 
-  // GEMINI AI
+  // AI SETTINGS
+
+  const ai =
+   user.ai_settings?.[0]
+
+  const apiKey =
+   ai?.api_key ||
+   process.env.GEMINI_API_KEY
+
+  const model =
+   ai?.model ||
+   "gemini-1.5-flash"
+
+  const systemPrompt =
+   ai?.prompt ||
+   "You are helpful AI assistant"
+
+  // GEMINI CALL
 
   const aiResponse =
    await fetch(
 
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" +
-    process.env.GEMINI_API_KEY,
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
 
     {
 
@@ -70,7 +94,10 @@ export async function POST(
        {
         parts:[
          {
-          text:userMessage
+          text:
+           systemPrompt +
+           "\nUser: " +
+           userMessage
          }
         ]
        }
@@ -89,7 +116,7 @@ export async function POST(
    aiData?.candidates?.[0]?.content?.parts?.[0]?.text
    || "AI error"
 
-  // SEND TELEGRAM MESSAGE
+  // TELEGRAM SEND MESSAGE
 
   await fetch(
 
