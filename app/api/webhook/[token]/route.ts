@@ -7,15 +7,17 @@ const supabase = createClient(
 )
 
 export async function POST(
- req:Request,
- { params }:{ params:{ token:string } }
+ request: Request,
+ context: { params: { token: string } }
 ){
 
  try{
 
-  const token = params.token
+  const token =
+   context.params.token
 
-  const body = await req.json()
+  const body =
+   await request.json()
 
   const chatId =
    body?.message?.chat?.id
@@ -26,12 +28,14 @@ export async function POST(
 
   if(!chatId || !userMessage){
 
-   return NextResponse.json({ ok:true })
+   return NextResponse.json({
+    ok:true
+   })
 
   }
 
 
-  // connection find
+  // find connection
   const { data:connection } =
    await supabase
     .from("telegram_connections")
@@ -42,19 +46,20 @@ export async function POST(
 
   if(!connection){
 
-   return NextResponse.json({ ok:true })
+   return NextResponse.json({
+    ok:true
+   })
 
   }
 
 
-  // ai settings find
+  // find AI settings
   const { data:ai } =
    await supabase
     .from("ai_settings")
     .select("*")
     .eq("user_id", connection.user_id)
     .single()
-
 
 
   const apiKey =
@@ -64,7 +69,7 @@ export async function POST(
 
   const model =
    ai?.model ||
-   "gemini-1.5-flash"
+   "gemini-2.5-flash"
 
 
   const prompt =
@@ -73,7 +78,7 @@ export async function POST(
 
 
 
-  // AI response
+  // AI call
   const aiResponse =
    await fetch(
 
@@ -94,11 +99,9 @@ export async function POST(
         parts:[
          {
           text:
-
 prompt +
 "\nUser: " +
 userMessage
-
          }
         ]
        }
@@ -121,7 +124,7 @@ userMessage
 
 
 
-  // telegram reply
+  // send reply
   await fetch(
 
 `https://api.telegram.org/bot${token}/sendMessage`,
