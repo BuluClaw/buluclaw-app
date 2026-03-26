@@ -8,13 +8,13 @@ const supabase = createClient(
 
 export async function POST(
  req: NextRequest,
- { params }: { params: { token: string } }
+ context: any
 ) {
 
  try {
 
   const token =
-   params.token
+   context.params.token
 
 
   const body =
@@ -36,7 +36,7 @@ export async function POST(
   }
 
 
-  // get user ai settings
+  // user ai settings
   const { data } =
    await supabase
     .from("telegram_connections")
@@ -50,7 +50,6 @@ export async function POST(
     `)
     .eq("bot_token", token)
     .single()
-
 
 
   const ai =
@@ -112,10 +111,10 @@ export async function POST(
 
   const reply =
    aiJson?.candidates?.[0]?.content?.parts?.[0]?.text
-   || "error"
+   || "AI error"
 
 
-  // send telegram reply
+  // telegram reply
   await fetch(
 
    `https://api.telegram.org/bot${token}/sendMessage`,
