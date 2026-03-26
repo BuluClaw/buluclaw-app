@@ -61,7 +61,7 @@ const connectTelegram = async () => {
   })
 
   const data = await res.json()
-  
+
   if(data.success){
 
  setTelegramConnected(true)
@@ -160,7 +160,10 @@ const connectTelegram = async () => {
         </h2>
 
         {/* GUIDE */}
-        <div className="text-gray-300 text-[14px] leading-relaxed space-y-2">
+        {!telegramConnected && (
+        <div
+        
+           className="text-gray-300 text-[14px] leading-relaxed space-y-2">
 
   <h3 className="text-white font-semibold text-[17px]">
     How to get your bot token?
@@ -191,7 +194,7 @@ const connectTelegram = async () => {
   </p>
 
 </div>
-
+)}
         {/* INPUT */}
         <input
           type="text"
