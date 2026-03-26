@@ -160,7 +160,7 @@ const connectTelegram = async () => {
         </h2>
 
         {/* GUIDE */}
-        {!telegramConnected && (
+       {!telegramConnected && (
         <div
         
            className="text-gray-300 text-[14px] leading-relaxed space-y-2">
@@ -192,7 +192,7 @@ const connectTelegram = async () => {
     5. Paste the token in the field below and click{" "}
     <span className="text-white font-medium">Save & Connect</span>.
   </p>
-
+       
 </div>
 )}
         {/* INPUT */}
@@ -231,6 +231,7 @@ const connectTelegram = async () => {
 
     </div>
   </div>
+  
 )}
       <>
           {/* MAIN HOME PAGE */}
