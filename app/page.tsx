@@ -36,93 +36,54 @@ useEffect(() => {
 
 const connectTelegram = async () => {
 
-  if (!token) {
-    setStatus({
-      type: "error",
-      message: "Please enter bot token",
-    });
-    return;
-  }
+ try{
 
-  setLoading(true);
+  const saveRes = await fetch("/api/save-telegram-token",{
 
-  try {
+   method:"POST",
 
-    // STEP A — save token DB me
-    const saveRes = await fetch("/api/save-telegram-token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token,
-        email: localStorage.getItem("user_email"),
-      }),
-    });
+   headers:{
+    "Content-Type":"application/json"
+   },
 
-    const saveData = await saveRes.json();
+   body:JSON.stringify({
 
-    if (!saveData.success) {
-      throw new Error("Token save failed");
-    }
+    token,
+    email: localStorage.getItem("user_email")
+
+   })
+
+  })
 
 
-    // STEP B — webhook connect
-const connectRes = await fetch("/api/set-webhook", {
-
- method: "POST",
-
- headers: {
-  "Content-Type": "application/json"
- },
-
- body: JSON.stringify({
-
-  bot_token: token
-
- })
-
-})
-
-    const connectData = await connectRes.json();
+  const saveData =
+   await saveRes.json()
 
 
-    if (connectData.success) {
+  if(!saveData.success){
 
-      setTelegramConnected(true);
-
-      setStatus({
-        type: "success",
-        message: "Bot connected successfully 🤖",
-      });
-
-      setTimeout(() => setStatus(null), 4000);
-
-      setStep(null);
-
-    } else {
-
-      setStatus({
-        type: "error",
-        message: "Bot connect failed",
-      });
-
-    }
-
-  } catch (err) {
-
-    setStatus({
-      type: "error",
-      message: "Server error",
-    });
+   throw new Error("Token save failed")
 
   }
 
-  setLoading(false);
 
-};
+  localStorage.setItem(
+   "telegram_token",
+   token
+  )
 
 
+  alert("Telegram connected")
+
+ }
+ catch(err){
+
+  alert("Error connecting bot")
+
+ }
+
+}
+  
     return (
 <div className="min-h-screen text-white px-4 md:px-6 py-6 md:py-10 flex flex-col items-center bg-gradient-to-b from-black via-[#0b1120] to-black">
 
