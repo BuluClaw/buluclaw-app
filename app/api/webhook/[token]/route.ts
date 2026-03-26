@@ -25,60 +25,56 @@ export async function POST(
   const userMessage =
    body?.message?.text
 
-
   if(!chatId || !userMessage){
 
-   return NextResponse.json({
-    ok:true
-   })
+   return NextResponse.json({ ok:true })
 
   }
 
 
-  // find connection
-  const { data:connection } =
+  // get user AI settings
+
+  const { data:user } =
    await supabase
     .from("telegram_connections")
-    .select("user_id")
+    .select(`
+     user_id,
+     ai_settings(
+      api_key,
+      model,
+      prompt
+     )
+    `)
     .eq("bot_token", token)
     .single()
 
 
-  if(!connection){
+  if(!user){
 
-   return NextResponse.json({
-    ok:true
-   })
+   console.log("user not found")
+
+   return NextResponse.json({ ok:true })
 
   }
 
 
-  // find AI settings
-  const { data:ai } =
-   await supabase
-    .from("ai_settings")
-    .select("*")
-    .eq("user_id", connection.user_id)
-    .single()
+  const ai =
+   user.ai_settings[0]
 
 
   const apiKey =
-   ai?.api_key ||
-   process.env.GEMINI_API_KEY
-
+   ai.api_key
 
   const model =
-   ai?.model ||
-   "gemini-2.5-flash"
+   ai.model || "gemini-2.5-flash"
 
-
-  const prompt =
-   ai?.prompt ||
-   "You are helpful assistant"
+  const systemPrompt =
+   ai.prompt || "You are helpful assistant"
 
 
 
-  // AI call
+  // call AI
+
   const aiResponse =
    await fetch(
 
@@ -99,9 +95,9 @@ export async function POST(
         parts:[
          {
           text:
-prompt +
-"\nUser: " +
-userMessage
+           systemPrompt +
+           "\nUser: " +
+           userMessage
          }
         ]
        }
@@ -124,10 +120,11 @@ userMessage
 
 
 
-  // send reply
+  // send telegram reply
+
   await fetch(
 
-`https://api.telegram.org/bot${token}/sendMessage`,
+   `https://api.telegram.org/bot${token}/sendMessage`,
 
    {
 
@@ -149,23 +146,16 @@ userMessage
   )
 
 
-  return NextResponse.json({
+  return NextResponse.json({ ok:true })
 
-   ok:true
-
-  })
-
-
- }catch(err){
+ }
+ catch(err){
 
   console.log(err)
 
   return NextResponse.json(
-
    { ok:false },
-
    { status:500 }
-
   )
 
  }
