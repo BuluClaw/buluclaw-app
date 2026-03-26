@@ -8,14 +8,17 @@ const supabase = createClient(
 
 export async function POST(
  request: Request,
- { params }: { params: { token: string } }
+ context: { params: { token: string } }
 ){
 
  try{
 
+  // telegram bot token from url
   const token =
-   params.token
+   context.params.token
 
+
+  // telegram message data
   const body =
    await request.json()
 
@@ -25,6 +28,7 @@ export async function POST(
   const userMessage =
    body?.message?.text
 
+
   if(!chatId || !userMessage){
 
    return NextResponse.json({ ok:true })
@@ -32,6 +36,7 @@ export async function POST(
   }
 
 
+  // get user AI settings from database
   const { data:user } =
    await supabase
     .from("telegram_connections")
@@ -50,26 +55,32 @@ export async function POST(
 
   if(!user){
 
+   console.log("user not found")
+
    return NextResponse.json({ ok:true })
 
   }
 
 
-
+  // ai settings (relation array hota hai)
   const ai =
    user.ai_settings?.[0]
+
 
   const apiKey =
    ai?.api_key
 
+
   const model =
    ai?.model || "gemini-1.5-flash"
+
 
   const systemPrompt =
    ai?.prompt || "You are helpful assistant"
 
 
 
+  // call gemini ai
   const aiResponse =
    await fetch(
 
@@ -115,6 +126,7 @@ export async function POST(
 
 
 
+  // send reply to telegram
   await fetch(
 
    `https://api.telegram.org/bot${token}/sendMessage`,
@@ -141,14 +153,18 @@ export async function POST(
 
   return NextResponse.json({ ok:true })
 
+
  }
  catch(err){
 
   console.log(err)
 
   return NextResponse.json(
+
    { ok:false },
+
    { status:500 }
+
   )
 
  }
