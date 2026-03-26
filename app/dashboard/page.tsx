@@ -15,15 +15,13 @@ const [checkingPayment,setCheckingPayment] = useState(true)
 
 
 
-// PAYMENT CHECK (FIXED)
+// PAYMENT CHECK (SAME)
 useEffect(()=>{
 
-// URL me payment success check karega
 const urlParams = new URLSearchParams(window.location.search)
 
 const paidFromURL = urlParams.get("paid")
 
-// agar payment success URL se aayi
 if(paidFromURL==="true"){
 
 localStorage.setItem("paid","true")
@@ -34,7 +32,6 @@ return
 
 }
 
-// localStorage check
 const paidSaved = localStorage.getItem("paid")
 
 if(paidSaved==="true"){
@@ -43,7 +40,6 @@ setCheckingPayment(false)
 
 }else{
 
-// infinite loop prevent
 if(window.location.pathname==="/dashboard"){
 
 router.replace("/checkout")
@@ -56,7 +52,7 @@ router.replace("/checkout")
 
 
 
-// animation start only after payment check
+// animation (SAME)
 useEffect(()=>{
 
 if(checkingPayment) return
@@ -74,7 +70,7 @@ setStep(3)
 
 
 
-// TELEGRAM CONNECT
+// TELEGRAM CONNECT (ONLY ADD WEBHOOK PART)
 async function handleConnect(){
 
 setChecking(true)
@@ -87,12 +83,37 @@ const data = await res.json()
 
 if(data.connected){
 
+/* NEW ADD START */
+
+const token =
+ localStorage.getItem("telegram_token")
+
+await fetch("/api/set-webhook",{
+
+ method:"POST",
+
+ headers:{
+  "Content-Type":"application/json"
+ },
+
+ body:JSON.stringify({
+
+  bot_token:token
+
+ })
+
+})
+
+/* NEW ADD END */
+
 setChecking(false)
 setLoading(true)
 
 setTimeout(()=>{
+
 setLoading(false)
 setSuccess(true)
+
 },3000)
 
 }else{
@@ -113,7 +134,7 @@ alert("Server error")
 
 
 
-// loading screen while checking payment
+// loading screen (SAME)
 if(checkingPayment){
 
 return(
@@ -133,6 +154,7 @@ Checking payment...
 return(
 
 <div className="h-screen w-screen flex items-center justify-center bg-black text-white">
+
 
 {/* STEP 1 */}
 {step===1 && (
@@ -154,6 +176,7 @@ Do not switch other tabs. This only takes a few seconds.
 </div>
 
 )}
+
 
 
 {/* STEP 2 */}
@@ -208,9 +231,7 @@ Follow these steps
 onClick={handleConnect}
 className="w-full bg-white text-black py-3 rounded-lg font-medium"
 >
-
 {checking ? "Checking..." : "I have sent a message ✓"}
-
 </button>
 
 </div>
@@ -247,7 +268,6 @@ Connecting your bot. Hang tight...
 
 <div className="w-[520px] bg-[#02050d] rounded-2xl p-12 text-center border border-[#0e1628] shadow-2xl">
 
-{/* green tick */}
 
 <div className="flex justify-center mb-6">
 
@@ -264,8 +284,6 @@ Connecting your bot. Hang tight...
 </div>
 
 
-{/* title */}
-
 <h2 className="text-xl font-medium mb-2">
 
 Deployment success!
@@ -279,8 +297,6 @@ Your bot is live. Use your Telegram to chat; usage and credits are below.
 
 </p>
 
-
-{/* price */}
 
 <div className="text-5xl font-semibold mb-2">
 
@@ -303,8 +319,6 @@ $0 used today • $0 used this month • $10 per month plan
 </div>
 
 
-
-{/* purchase box */}
 
 <div className="flex gap-3 mb-6">
 
@@ -345,11 +359,13 @@ Too slow or memory issues?
 {" "}
 
 <a
-          href="mailto:support@buluclaw.com"
-          className="underline underline-offset-4 hover:text-white pointer-events-auto"
-        >
-          Contact Support
-        </a>
+href="mailto:support@buluclaw.com"
+className="underline underline-offset-4 hover:text-white pointer-events-auto"
+>
+
+Contact Support
+
+</a>
 
 </p>
 
@@ -357,5 +373,9 @@ Too slow or memory issues?
 </div>
 
 )}
+
 </div>
-)}
+
+)
+
+}

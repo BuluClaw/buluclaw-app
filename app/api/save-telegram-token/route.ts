@@ -6,34 +6,42 @@ const supabase = createClient(
  process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-export async function POST(req: Request){
+export async function POST(req:Request){
 
- try{
+ const body = await req.json()
 
-  const { token, email } =
-   await req.json()
+ const token = body.token
+ const email = body.email
 
+ // user find
+ const { data:user } =
   await supabase
-   .from("telegram_connections")
-   .insert({
-    email,
-    bot_token: token
-   })
+   .from("users")
+   .select("id")
+   .eq("email", email)
+   .single()
 
-  return NextResponse.json({
+   if(!user){
 
-   success:true
+ return NextResponse.json({
+  error:"user not found"
+ })
+
+}
+
+ // token save
+ await supabase
+  .from("telegram_connections")
+  .upsert({
+
+   user_id:user.id,
+   email,
+   bot_token:token
 
   })
 
- }catch(e){
-
-  return NextResponse.json({
-
-   success:false
-
-  })
-
- }
+ return NextResponse.json({
+  success:true
+ })
 
 }
