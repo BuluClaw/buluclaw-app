@@ -7,17 +7,15 @@ const supabase = createClient(
 )
 
 export async function POST(
- req: Request,
- context: any
+ req:Request,
+ { params }:{ params:{ token:string } }
 ){
 
  try{
 
-  const token =
-   context.params.token
+  const token = params.token
 
-  const body =
-   await req.json()
+  const body = await req.json()
 
   const chatId =
    body?.message?.chat?.id
@@ -25,60 +23,61 @@ export async function POST(
   const userMessage =
    body?.message?.text
 
-  // agar message empty ho to ignore
+
   if(!chatId || !userMessage){
 
    return NextResponse.json({ ok:true })
 
   }
 
-  // USER + AI SETTINGS FETCH
 
-  const { data:user } =
+  // connection find
+  const { data:connection } =
    await supabase
     .from("telegram_connections")
-    .select(`
-     user_id,
-     ai_settings (
-      api_key,
-      model,
-      prompt
-     )
-    `)
+    .select("user_id")
     .eq("bot_token", token)
     .single()
 
-  if(!user){
 
-   console.log("user not found")
+  if(!connection){
 
    return NextResponse.json({ ok:true })
 
   }
 
-  // AI SETTINGS
 
-  const ai =
-   user.ai_settings?.[0]
+  // ai settings find
+  const { data:ai } =
+   await supabase
+    .from("ai_settings")
+    .select("*")
+    .eq("user_id", connection.user_id)
+    .single()
+
+
 
   const apiKey =
    ai?.api_key ||
    process.env.GEMINI_API_KEY
 
+
   const model =
    ai?.model ||
    "gemini-1.5-flash"
 
-  const systemPrompt =
+
+  const prompt =
    ai?.prompt ||
-   "You are helpful AI assistant"
+   "You are helpful assistant"
 
-  // GEMINI CALL
 
+
+  // AI response
   const aiResponse =
    await fetch(
 
-    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
 
     {
 
@@ -95,9 +94,11 @@ export async function POST(
         parts:[
          {
           text:
-           systemPrompt +
-           "\nUser: " +
-           userMessage
+
+prompt +
+"\nUser: " +
+userMessage
+
          }
         ]
        }
@@ -109,18 +110,21 @@ export async function POST(
 
    )
 
+
   const aiData =
    await aiResponse.json()
+
 
   const reply =
    aiData?.candidates?.[0]?.content?.parts?.[0]?.text
    || "AI error"
 
-  // TELEGRAM SEND MESSAGE
 
+
+  // telegram reply
   await fetch(
 
-   `https://api.telegram.org/bot${token}/sendMessage`,
+`https://api.telegram.org/bot${token}/sendMessage`,
 
    {
 
@@ -141,15 +145,24 @@ export async function POST(
 
   )
 
-  return NextResponse.json({ ok:true })
+
+  return NextResponse.json({
+
+   ok:true
+
+  })
+
 
  }catch(err){
 
   console.log(err)
 
   return NextResponse.json(
+
    { ok:false },
+
    { status:500 }
+
   )
 
  }
