@@ -121,7 +121,7 @@ const connectTelegram = async () => {
 
       
 {/* TELEGRAM PAGE */}
-{step === "telegram" && (
+{step === "telegram" && !telegramConnected && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
 
     {/* MAIN BOX */}
@@ -160,9 +160,8 @@ const connectTelegram = async () => {
         </h2>
 
         {/* GUIDE */}
-       {!telegramConnected && (
+       
         <div
-        
            className="text-gray-300 text-[14px] leading-relaxed space-y-2">
 
   <h3 className="text-white font-semibold text-[17px]">
@@ -194,7 +193,7 @@ const connectTelegram = async () => {
   </p>
        
 </div>
-)}
+
         {/* INPUT */}
         <input
           type="text"
@@ -226,13 +225,16 @@ const connectTelegram = async () => {
             playsInline
             className="w-[300px] h-auto object-cover"
           />
+          
         </div>
+        
       </div>
 
     </div>
   </div>
-  
 )}
+
+
       <>
           {/* MAIN HOME PAGE */}
 
