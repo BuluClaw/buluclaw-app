@@ -395,15 +395,70 @@ const connectTelegram = async () => {
 
 {connected && (
 
-<div className="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-4 rounded-xl shadow-xl">
+<div className="fixed bottom-6 right-6 z-50">
 
- Telegram connected
- <br/>
- Your bot is now linked. You are ready to send & receive messages.
+  <div className="
+  flex items-start gap-3
+  bg-gradient-to-br from-green-900 to-green-800
+  border border-green-700
+  text-green-100
+  px-6 py-5
+  rounded-2xl
+  shadow-2xl
+  w-[340px]
+  ">
+
+    <div className="mt-1">
+
+      <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+
+        <svg
+         viewBox="0 0 24 24"
+         fill="none"
+         className="w-4 h-4 text-white"
+        >
+
+         <path
+          d="M20 6L9 17l-5-5"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+         />
+
+        </svg>
+
+      </div>
+
+    </div>
+
+
+    <div>
+
+      <div className="font-semibold text-green-200 text-[16px]">
+
+        Telegram connected
+
+      </div>
+
+
+      <div className="text-sm text-green-300 mt-1 leading-relaxed">
+
+        Your bot is now linked. You are ready to send & receive messages.
+
+      </div>
+
+    </div>
+
+
+  </div>
 
 </div>
 
 )}
+
+
+
 
                   {/* USER CARD */}
                   <div className="w-full max-w-md flex items-center bg-zinc-900 rounded-2xl px-6 py-4 shadow-lg gap-4 mt-6">
