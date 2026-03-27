@@ -72,8 +72,7 @@ export async function POST(req: Request){
 // AUTO SET WEBHOOK
 await fetch(
 
- `${process.env.NEXT_PUBLIC_BASE_URL}/api/set-webhook`,
-
+ `${process.env.NEXT_PUBLIC_SITE_URL}/api/set-webhook`,
  {
   method:"POST",
 
