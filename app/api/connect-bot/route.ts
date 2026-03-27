@@ -50,25 +50,6 @@ export async function POST(req: Request){
    })
 
   }
-
-
-  // AUTO CREATE AI SETTINGS
-  await supabase
-  .from("ai_settings")
-  .insert({
-
-   user_id: data.id,
-
-   api_key:
-    process.env.DEFAULT_AI_KEY,
-
-   model:
-    "gemini-2.5-flash",
-
-   prompt:
-    "You are helpful assistant"
-
-  })
 // AUTO SET WEBHOOK
 await fetch(
 
@@ -89,6 +70,25 @@ await fetch(
 
  }
 )
+
+  // AUTO CREATE AI SETTINGS
+  await supabase
+  .from("ai_settings")
+  .insert({
+
+   user_id: data.id,
+
+   api_key:
+    process.env.DEFAULT_AI_KEY,
+
+   model:
+    "gemini-2.5-flash",
+
+   prompt:
+    "You are helpful assistant"
+
+  })
+
   return NextResponse.json({
 
    success:true
