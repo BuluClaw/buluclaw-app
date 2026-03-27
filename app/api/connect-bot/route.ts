@@ -63,7 +63,7 @@ export async function POST(req: Request){
     process.env.DEFAULT_AI_KEY,
 
    model:
-    "gemini-1.5-flash",
+    "gemini-2.5-flash",
 
    prompt:
     "You are helpful assistant"
