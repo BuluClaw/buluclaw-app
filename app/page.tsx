@@ -54,9 +54,10 @@ const connectTelegram = async () => {
     "Content-Type":"application/json"
    },
 
-   body:JSON.stringify({
-    token
-   })
+  body: JSON.stringify({
+ token,
+ email: session?.user?.email
+})
 
   })
 
@@ -96,10 +97,6 @@ const connectTelegram = async () => {
  setLoading(false)
 
 }
-
-
-
-
 
 
     return (

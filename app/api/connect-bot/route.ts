@@ -11,6 +11,7 @@ export async function POST(req: Request){
  try{
 
   const { token,email } =
+ 
    await req.json()
 
 
@@ -19,7 +20,7 @@ export async function POST(req: Request){
    return NextResponse.json({
 
     success:false,
-    error:"token missing"
+    error:"token missing,email missing"
 
    })
 
@@ -32,7 +33,7 @@ export async function POST(req: Request){
     .from("telegram_connections")
     .insert({
 
-     email: email || "user",
+     email: email,
      bot_token: token
 
     })
