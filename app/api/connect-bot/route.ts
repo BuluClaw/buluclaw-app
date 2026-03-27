@@ -11,32 +11,32 @@ export async function POST(req: Request){
  try{
 
   const { token,email } =
- 
    await req.json()
-
 
   if(!token){
 
    return NextResponse.json({
 
     success:false,
-    error:"token missing,email missing"
+    error:"token missing"
 
    })
 
   }
 
 
-  // save token only
-  const { error } =
+  // SAVE TELEGRAM TOKEN
+  const { data, error } =
    await supabase
-    .from("telegram_connections")
-    .insert({
+   .from("telegram_connections")
+   .insert({
 
-     email: email,
-     bot_token: token
+    email: email,
+    bot_token: token
 
-    })
+   })
+   .select()
+   .single()
 
 
   if(error){
@@ -52,6 +52,25 @@ export async function POST(req: Request){
   }
 
 
+  // AUTO CREATE AI SETTINGS
+  await supabase
+  .from("ai_settings")
+  .insert({
+
+   user_id: data.id,
+
+   api_key:
+    process.env.DEFAULT_AI_KEY,
+
+   model:
+    "gemini-1.5-flash",
+
+   prompt:
+    "You are helpful assistant"
+
+  })
+
+
   return NextResponse.json({
 
    success:true
@@ -59,9 +78,7 @@ export async function POST(req: Request){
   })
 
 
- }
-
- catch(err){
+ }catch(err){
 
   console.log(err)
 
