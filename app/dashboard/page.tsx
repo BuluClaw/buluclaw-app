@@ -98,7 +98,7 @@ await fetch("/api/set-webhook",{
 
  body:JSON.stringify({
 
-  bot_token:token
+   token:token 
 
  })
 
