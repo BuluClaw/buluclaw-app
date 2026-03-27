@@ -51,7 +51,6 @@ export async function POST(req: Request){
 
   }
 
-
   // AUTO CREATE AI SETTINGS
   await supabase
   .from("ai_settings")
@@ -69,29 +68,6 @@ export async function POST(req: Request){
     "You are helpful assistant"
 
   })
-
-
-  // AUTO SET WEBHOOK
-  await fetch(
-
-   `${process.env.NEXT_PUBLIC_SITE_URL}/api/set-webhook`,
-
-   {
-    method:"POST",
-
-    headers:{
-     "Content-Type":"application/json"
-    },
-
-    body: JSON.stringify({
-
-     bot_token: token
-
-    })
-
-   }
-  )
-
 
   return NextResponse.json({
 
