@@ -2,22 +2,53 @@ import { NextResponse } from "next/server"
 
 export async function POST(req:Request){
 
- const body =
-  await req.json()
+ try{
 
- const token =
-  body.bot_token
+  const { bot_token } = await req.json()
 
- await fetch(
+  const url = process.env.NEXT_PUBLIC_SITE_URL
 
-  `https://api.telegram.org/bot${token}/setWebhook?url=${process.env.NEXT_PUBLIC_APP_URL}/api/webhook/${token}`
+  const webhookURL =
+   `${url}/api/webhook/${bot_token}`
 
- )
+  const res = await fetch(
 
- return NextResponse.json({
+   `https://api.telegram.org/bot${bot_token}/setWebhook`,
 
-  success:true
+   {
 
- })
+    method:"POST",
+
+    headers:{
+     "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+
+     url:webhookURL
+
+    })
+
+   }
+
+  )
+
+  const data = await res.json()
+
+  return NextResponse.json({
+
+   success:data.ok
+
+  })
+
+ }catch(e){
+
+  return NextResponse.json({
+
+   success:false
+
+  })
+
+ }
 
 }
