@@ -85,8 +85,7 @@ if(data.connected){
 
 /* NEW ADD START */
 
-const token =
- localStorage.getItem("telegram_token")
+const token = data.token
 
 await fetch("/api/set-webhook",{
 
@@ -98,7 +97,7 @@ await fetch("/api/set-webhook",{
 
  body:JSON.stringify({
 
-   token:token 
+     token:data.token
 
  })
 
