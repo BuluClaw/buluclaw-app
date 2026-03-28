@@ -9,17 +9,18 @@ export async function POST(req: Request){
   if(!token){
 
    return NextResponse.json({
-    success:false,
-    error:"token missing"
+    success:false
    })
 
   }
 
   const webhookUrl =
-   `${process.env.NEXT_PUBLIC_SITE_URL}/api/webhook/${token}`
+  `${process.env.NEXT_PUBLIC_SITE_URL}/api/webhook/${token}`
 
   const tgRes = await fetch(
+
    `https://api.telegram.org/bot${token}/setWebhook`,
+
    {
     method:"POST",
     headers:{
@@ -29,18 +30,23 @@ export async function POST(req: Request){
      url:webhookUrl
     })
    }
+
   )
 
   const data = await tgRes.json()
 
+  console.log("telegram webhook:", data)
+
   return NextResponse.json({
+
    success:data.ok,
    webhook:webhookUrl
+
   })
 
- }catch(err){
+ }catch(e){
 
-  console.log(err)
+  console.log(e)
 
   return NextResponse.json({
    success:false

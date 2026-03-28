@@ -10,6 +10,7 @@ export async function GET(){
 
  try{
 
+  // latest saved telegram bot token
   const { data, error } = await supabase
    .from("telegram_connections")
    .select("bot_token")
@@ -25,40 +26,38 @@ export async function GET(){
 
   }
 
-  // webhook set
-  await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/set-webhook`,{
+  // AUTO SET WEBHOOK
+  const webhookRes = await fetch(
+   `${process.env.NEXT_PUBLIC_SITE_URL}/api/set-webhook`,
+   {
+    method:"POST",
+    headers:{
+     "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+     token:data.bot_token
+    })
+   }
+  )
 
-   method:"POST",
+  const webhookData = await webhookRes.json()
 
-   headers:{
-    "Content-Type":"application/json"
-   },
-
-   body:JSON.stringify({
-
-    token:data.bot_token
-
-   })
-
-  })
+  console.log("webhook auto result:", webhookData)
 
   return NextResponse.json({
 
    connected:true,
-   token:data.bot_token
+   token:data.bot_token,
+   webhook:webhookData
 
   })
 
- }
+ }catch(err){
 
- catch(err){
-
-  console.log(err)
+  console.log("check telegram error:", err)
 
   return NextResponse.json({
-
    connected:false
-
   })
 
  }
