@@ -95,29 +95,18 @@ openclaw pairing approve telegram ${pairingCode}`
 
 
   const { data } =
-  await supabase
-
-  .from("telegram_connections")
-
-  .select(`
-
-   user_id,
-
-   ai_settings(
-
-    api_key,
-
-    model,
-
-    prompt
-
-   )
-
-  `)
-
-  .eq("bot_token", token)
-
-  .single()
+await supabase
+.from("telegram_connections")
+.select(`
+ id,
+ ai_settings(
+  api_key,
+  model,
+  prompt
+ )
+`)
+.eq("bot_token", token)
+.single()
 
 
 
