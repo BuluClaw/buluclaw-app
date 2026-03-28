@@ -178,7 +178,7 @@ openclaw pairing approve telegram ${pairingCode}`
   .select("role, content")
   .eq("telegram_id", chatId)
   .order("created_at",{ ascending:true })
-  .limit(10)
+  .limit(30)
 
 
 
