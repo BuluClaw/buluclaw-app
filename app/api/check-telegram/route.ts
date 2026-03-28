@@ -25,7 +25,7 @@ export async function GET(){
 
   }
 
-  // webhook set karo
+  // webhook set
   await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/set-webhook`,{
 
    method:"POST",
@@ -44,7 +44,8 @@ export async function GET(){
 
   return NextResponse.json({
 
-   connected:true
+   connected:true,
+   token:data.bot_token
 
   })
 
