@@ -117,8 +117,8 @@ setSuccess(true)
 
 }else{
 
-setChecking(false)
-alert("Telegram bot ko message bhejo pehle")
+
+
 
 }
 
