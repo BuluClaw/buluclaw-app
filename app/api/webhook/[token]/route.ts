@@ -8,18 +8,20 @@ const supabase = createClient(
 
 export async function POST(
  req: NextRequest,
- context: { params:{ token:string } }
+ { params }: { params: { token: string } }
 ){
 
  try{
 
-  const token = context.params.token
+  const token = params.token
 
   const body = await req.json()
 
-  const chatId = body?.message?.chat?.id
+  const chatId =
+  body?.message?.chat?.id
 
-  const text = body?.message?.text
+  const text =
+  body?.message?.text
 
 
   if(!chatId || !text){
@@ -30,43 +32,54 @@ export async function POST(
 
 
   /*
-  =====================================
-  START COMMAND → SEND PAIRING MESSAGE
-  =====================================
+  ============================
+  START MESSAGE
+  ============================
   */
 
   if(text === "/start"){
 
    const pairingCode =
-   Math.random().toString(36).substring(2,8).toUpperCase()
+   Math.random()
+   .toString(36)
+   .substring(2,8)
+   .toUpperCase()
 
-   const startMessage = `
-OpenClaw: access not configured.
+   const startMessage =
+
+`OpenClaw: access not configured.
 
 Your Telegram user id: ${chatId}
 
 Pairing code: ${pairingCode}
 
 Ask the bot owner to approve with:
-openclaw pairing approve telegram ${pairingCode}
-`
+openclaw pairing approve telegram ${pairingCode}`
 
-   await fetch(`https://api.telegram.org/bot${token}/sendMessage`,{
 
-    method:"POST",
+   await fetch(
 
-    headers:{
-     "Content-Type":"application/json"
-    },
+    `https://api.telegram.org/bot${token}/sendMessage`,
 
-    body:JSON.stringify({
+    {
 
-     chat_id:chatId,
-     text:startMessage
+     method:"POST",
 
-    })
+     headers:{
+      "Content-Type":"application/json"
+     },
 
-   })
+     body:JSON.stringify({
+
+      chat_id:chatId,
+      text:startMessage
+
+     })
+
+    }
+
+   )
+
 
    return NextResponse.json({ ok:true })
 
@@ -75,25 +88,37 @@ openclaw pairing approve telegram ${pairingCode}
 
 
   /*
-  =====================================
-  AI RESPONSE AFTER PAIRING
-  =====================================
+  ============================
+  AI RESPONSE
+  ============================
   */
 
 
   const { data } =
   await supabase
+
   .from("telegram_connections")
+
   .select(`
+
    user_id,
+
    ai_settings(
+
     api_key,
+
     model,
+
     prompt
+
    )
+
   `)
+
   .eq("bot_token", token)
+
   .single()
+
 
 
   const ai =
@@ -112,6 +137,7 @@ openclaw pairing approve telegram ${pairingCode}
   const prompt =
   ai?.prompt ||
   "You are helpful assistant"
+
 
 
   const aiRes =
@@ -157,13 +183,18 @@ openclaw pairing approve telegram ${pairingCode}
   )
 
 
+
   const aiJson =
   await aiRes.json()
 
 
+
   const reply =
+
   aiJson?.candidates?.[0]?.content?.parts?.[0]?.text
+
   ||
+
   "AI error"
 
 
@@ -190,6 +221,7 @@ openclaw pairing approve telegram ${pairingCode}
    }
 
   )
+
 
 
   return NextResponse.json({ ok:true })
