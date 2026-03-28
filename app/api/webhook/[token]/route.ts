@@ -30,6 +30,114 @@ export async function POST(
 
   }
 
+  const voice =
+body?.message?.voice
+
+// voice message aaya
+if(voice){
+
+ const fileId =
+ voice.file_id
+
+
+ // telegram se file path lo
+ const fileRes =
+ await fetch(
+
+  `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
+
+ )
+
+ const fileData =
+ await fileRes.json()
+
+
+ const filePath =
+ fileData?.result?.file_path
+
+
+ const fileUrl =
+ `https://api.telegram.org/file/bot${token}/${filePath}`
+
+
+ // voice download
+ const audioRes =
+ await fetch(fileUrl)
+
+
+ const audioBuffer =
+ await audioRes.arrayBuffer()
+
+
+ // Gemini speech to text
+ const speechRes =
+ await fetch(
+
+  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+
+  {
+
+   method:"POST",
+
+   headers:{
+    "Content-Type":"application/json"
+   },
+
+   body:JSON.stringify({
+
+    contents:[
+
+     {
+
+      parts:[
+
+       {
+
+        inline_data:{
+         mime_type:"audio/ogg",
+         data:Buffer
+         .from(audioBuffer)
+         .toString("base64")
+        }
+
+       },
+
+       {
+
+        text:"convert speech to text"
+
+       }
+
+      ]
+
+     }
+
+    ]
+
+   })
+
+  }
+
+ )
+
+
+ const speechJson =
+ await speechRes.json()
+
+
+ const speechText =
+ speechJson
+ ?.candidates?.[0]
+ ?.content?.parts?.[0]
+ ?.text
+
+
+ // user text me convert
+ body.message.text =
+ speechText
+
+}
+
 
   /*
   ============================
@@ -84,7 +192,46 @@ openclaw pairing approve telegram ${pairingCode}`
    return NextResponse.json({ ok:true })
 
   }
+/*
+============================
+RESET MEMORY
+============================
+*/
 
+if(text === "/reset"){
+
+ await supabase
+ .from("ai_memory")
+ .delete()
+ .eq("telegram_id", chatId)
+
+ await fetch(
+
+  `https://api.telegram.org/bot${token}/sendMessage`,
+
+  {
+
+   method:"POST",
+
+   headers:{
+    "Content-Type":"application/json"
+   },
+
+   body:JSON.stringify({
+
+    chat_id:chatId,
+
+    text:"Memory cleared ✅\n\nAb nayi conversation start ho gayi."
+
+   })
+
+  }
+
+ )
+
+ return NextResponse.json({ ok:true })
+
+}
 
 
   /*
@@ -214,8 +361,20 @@ openclaw pairing approve telegram ${pairingCode}`
 
   })
 
+/*
+============================
+TYPING INDICATOR
+============================
+*/
 
-
+await fetch(`https://api.telegram.org/bot${token}/sendChatAction`,{
+ method:"POST",
+ headers:{ "Content-Type":"application/json" },
+ body:JSON.stringify({
+  chat_id:chatId,
+  action:"typing"
+ })
+})
   /*
   ============================
   AI REQUEST
