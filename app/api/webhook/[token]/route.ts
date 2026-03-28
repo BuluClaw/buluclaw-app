@@ -61,7 +61,7 @@ export async function POST(
 
 
   const model =
-   ai?.model || "gemini-1.5-flash"
+   ai?.model || "gemini-2.5-flash"
 
 
   const prompt =
