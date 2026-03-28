@@ -8,12 +8,12 @@ const supabase = createClient(
 
 export async function POST(
  req: NextRequest,
- { params }: { params: { token: string } }
+ context: any
 ){
 
  try{
 
-  const token = params.token
+  const token = context.params.token
 
   const body = await req.json()
 
