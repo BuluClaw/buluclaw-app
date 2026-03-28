@@ -138,7 +138,124 @@ if(voice){
 
 }
 
+/*
+============================
+IMAGE SUPPORT
+============================
+*/
 
+const photo =
+body?.message?.photo
+
+
+if(photo){
+
+ const fileId =
+ photo[photo.length-1].file_id
+
+
+ const fileRes =
+ await fetch(
+
+  `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
+
+ )
+
+
+ const fileData =
+ await fileRes.json()
+
+
+ const filePath =
+ fileData?.result?.file_path
+
+
+ const fileUrl =
+ `https://api.telegram.org/file/bot${token}/${filePath}`
+
+
+ const imageRes =
+ await fetch(fileUrl)
+
+
+ const imageBuffer =
+ await imageRes.arrayBuffer()
+
+
+ const base64Image =
+ Buffer.from(imageBuffer)
+ .toString("base64")
+
+
+ // image ko AI ko bhejne ke liye text set
+ body.message.text =
+ "Explain this image"
+
+
+ body.message.inlineImage =
+ base64Image
+
+}
+/*
+============================
+PDF SUPPORT
+============================
+*/
+
+const document =
+body?.message?.document
+
+
+if(document?.mime_type === "application/pdf"){
+
+ const fileId =
+ document.file_id
+
+
+ // telegram se file path lo
+ const fileRes =
+ await fetch(
+
+  `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
+
+ )
+
+
+ const fileData =
+ await fileRes.json()
+
+
+ const filePath =
+ fileData?.result?.file_path
+
+
+ const fileUrl =
+ `https://api.telegram.org/file/bot${token}/${filePath}`
+
+
+ // pdf download
+ const pdfRes =
+ await fetch(fileUrl)
+
+
+ const pdfBuffer =
+ await pdfRes.arrayBuffer()
+
+
+ const base64Pdf =
+ Buffer.from(pdfBuffer)
+ .toString("base64")
+
+
+ // AI ko instruction
+ body.message.text =
+ "Summarize this PDF clearly"
+
+
+ body.message.inlinePdf =
+ base64Pdf
+
+}
   /*
   ============================
   START MESSAGE
@@ -406,7 +523,24 @@ await fetch(`https://api.telegram.org/bot${token}/sendChatAction`,{
          text:prompt
         }
        ]
+     
       },
+      ...(body.message.inlinePdf
+ ? [{
+     inline_data:{
+      mime_type:"application/pdf",
+      data:body.message.inlinePdf
+     }
+   }]
+ : []),
+...(body.message.inlineImage
+ ? [{
+     inline_data:{
+      mime_type:"image/jpeg",
+      data:body.message.inlineImage
+     }
+   }]
+ : []),
 
       ...history,
 
