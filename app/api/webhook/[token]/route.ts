@@ -55,7 +55,7 @@ export async function POST(
    const speechRes =
    await fetch(
 
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
 
     {
 
@@ -303,7 +303,7 @@ export async function POST(
 
   const model =
   ai?.model ||
-  "gemini-1.5-flash"
+  "gemini-2.5-flash"
 
   const prompt =
   ai?.prompt ||
