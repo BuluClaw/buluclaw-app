@@ -87,6 +87,9 @@ if(data.connected){
 
 const token = data.token
 
+
+
+
 await fetch("/api/set-webhook",{
 
  method:"POST",
@@ -97,11 +100,12 @@ await fetch("/api/set-webhook",{
 
  body:JSON.stringify({
 
-     token:data.token
+     token: token
 
  })
 
 })
+
 
 /* NEW ADD END */
 
