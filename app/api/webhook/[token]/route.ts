@@ -18,7 +18,7 @@ export async function POST(
   const body = await req.json()
 
   const chatId =
-  body?.message?.chat?.id
+  body?.message?.chat?.id?.toString()
 
   const text =
   body?.message?.text
@@ -95,21 +95,21 @@ openclaw pairing approve telegram ${pairingCode}`
 
 
   // get connection
-const { data: connection } =
-await supabase
-.from("telegram_connections")
-.select("id")
-.eq("bot_token", token)
-.single()
+  const { data: connection } =
+  await supabase
+  .from("telegram_connections")
+  .select("id")
+  .eq("bot_token", token)
+  .single()
 
 
-// get ai settings
-const { data: ai } =
-await supabase
-.from("ai_settings")
-.select("api_key, model, prompt")
-.eq("user_id", connection?.id)
-.single()
+  // get ai settings
+  const { data: ai } =
+  await supabase
+  .from("ai_settings")
+  .select("api_key, model, prompt")
+  .eq("user_id", connection?.id)
+  .single()
 
 
   const apiKey =
@@ -125,6 +125,13 @@ await supabase
   ai?.prompt ||
   "You are helpful assistant"
 
+
+
+  /*
+  ============================
+  CHECK AI CONFIG
+  ============================
+  */
 
 
   if(!apiKey){
@@ -158,6 +165,61 @@ await supabase
 
 
 
+  /*
+  ============================
+  LOAD MEMORY
+  ============================
+  */
+
+
+  const { data: memory } =
+  await supabase
+  .from("ai_memory")
+  .select("role, content")
+  .eq("telegram_id", chatId)
+  .order("created_at",{ ascending:true })
+  .limit(10)
+
+
+
+  const history =
+  memory?.map(m=>({
+
+   role:m.role,
+   parts:[
+    { text:m.content }
+   ]
+
+  })) || []
+
+
+
+  /*
+  ============================
+  SAVE USER MESSAGE
+  ============================
+  */
+
+
+  await supabase
+  .from("ai_memory")
+  .insert({
+
+   telegram_id:chatId,
+   role:"user",
+   content:text
+
+  })
+
+
+
+  /*
+  ============================
+  AI REQUEST
+  ============================
+  */
+
+
   const aiRes =
   await fetch(
 
@@ -176,20 +238,23 @@ await supabase
      contents:[
 
       {
-
+       role:"user",
        parts:[
-
         {
-
-         text:
-         prompt +
-         "\nUser: " +
-         text
-
+         text:prompt
         }
-
        ]
+      },
 
+      ...history,
+
+      {
+       role:"user",
+       parts:[
+        {
+         text:text
+        }
+       ]
       }
 
      ]
@@ -215,6 +280,32 @@ await supabase
 
   "AI error"
 
+
+
+  /*
+  ============================
+  SAVE AI REPLY
+  ============================
+  */
+
+
+  await supabase
+  .from("ai_memory")
+  .insert({
+
+   telegram_id:chatId,
+   role:"assistant",
+   content:reply
+
+  })
+
+
+
+  /*
+  ============================
+  SEND MESSAGE
+  ============================
+  */
 
 
   await fetch(
