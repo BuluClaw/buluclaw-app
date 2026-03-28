@@ -20,267 +20,190 @@ export async function POST(
   const chatId =
   body?.message?.chat?.id?.toString()
 
-  const text =
-  body?.message?.text
+  let text =
+  body?.message?.text || ""
 
 
-  if(!chatId || !text){
-
-   return NextResponse.json({ ok:true })
-
-  }
+  /*
+  ============================
+  VOICE SUPPORT
+  ============================
+  */
 
   const voice =
-body?.message?.voice
+  body?.message?.voice
 
-// voice message aaya
-if(voice){
+  if(voice){
 
- const fileId =
- voice.file_id
+   const fileRes =
+   await fetch(
+    `https://api.telegram.org/bot${token}/getFile?file_id=${voice.file_id}`
+   )
 
+   const fileData =
+   await fileRes.json()
 
- // telegram se file path lo
- const fileRes =
- await fetch(
+   const fileUrl =
+   `https://api.telegram.org/file/bot${token}/${fileData.result.file_path}`
 
-  `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
+   const audioRes =
+   await fetch(fileUrl)
 
- )
+   const audioBuffer =
+   await audioRes.arrayBuffer()
 
- const fileData =
- await fileRes.json()
+   const speechRes =
+   await fetch(
 
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
 
- const filePath =
- fileData?.result?.file_path
+    {
 
+     method:"POST",
 
- const fileUrl =
- `https://api.telegram.org/file/bot${token}/${filePath}`
+     headers:{
+      "Content-Type":"application/json"
+     },
 
+     body:JSON.stringify({
 
- // voice download
- const audioRes =
- await fetch(fileUrl)
-
-
- const audioBuffer =
- await audioRes.arrayBuffer()
-
-
- // Gemini speech to text
- const speechRes =
- await fetch(
-
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-
-  {
-
-   method:"POST",
-
-   headers:{
-    "Content-Type":"application/json"
-   },
-
-   body:JSON.stringify({
-
-    contents:[
-
-     {
-
-      parts:[
+      contents:[
 
        {
 
-        inline_data:{
-         mime_type:"audio/ogg",
-         data:Buffer
-         .from(audioBuffer)
-         .toString("base64")
-        }
+        parts:[
 
-       },
+         {
 
-       {
+          inline_data:{
+           mime_type:"audio/ogg",
+           data:Buffer.from(audioBuffer).toString("base64")
+          }
 
-        text:"convert speech to text"
+         },
+
+         {
+          text:"Convert this speech to text"
+         }
+
+        ]
 
        }
 
       ]
 
-     }
+     })
 
-    ]
+    }
 
-   })
+   )
+
+   const speechJson =
+   await speechRes.json()
+
+   text =
+   speechJson?.candidates?.[0]?.content?.parts?.[0]?.text
+   || ""
 
   }
 
- )
 
-
- const speechJson =
- await speechRes.json()
-
-
- const speechText =
- speechJson
- ?.candidates?.[0]
- ?.content?.parts?.[0]
- ?.text
-
-
- // user text me convert
- body.message.text =
- speechText
-
-}
-
-/*
-============================
-IMAGE SUPPORT
-============================
-*/
-
-const photo =
-body?.message?.photo
-
-
-if(photo){
-
- const fileId =
- photo[photo.length-1].file_id
-
-
- const fileRes =
- await fetch(
-
-  `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
-
- )
-
-
- const fileData =
- await fileRes.json()
-
-
- const filePath =
- fileData?.result?.file_path
-
-
- const fileUrl =
- `https://api.telegram.org/file/bot${token}/${filePath}`
-
-
- const imageRes =
- await fetch(fileUrl)
-
-
- const imageBuffer =
- await imageRes.arrayBuffer()
-
-
- const base64Image =
- Buffer.from(imageBuffer)
- .toString("base64")
-
-
- // image ko AI ko bhejne ke liye text set
- body.message.text =
- "Explain this image"
-
-
- body.message.inlineImage =
- base64Image
-
-}
-/*
-============================
-PDF SUPPORT
-============================
-*/
-
-const document =
-body?.message?.document
-
-
-if(document?.mime_type === "application/pdf"){
-
- const fileId =
- document.file_id
-
-
- // telegram se file path lo
- const fileRes =
- await fetch(
-
-  `https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`
-
- )
-
-
- const fileData =
- await fileRes.json()
-
-
- const filePath =
- fileData?.result?.file_path
-
-
- const fileUrl =
- `https://api.telegram.org/file/bot${token}/${filePath}`
-
-
- // pdf download
- const pdfRes =
- await fetch(fileUrl)
-
-
- const pdfBuffer =
- await pdfRes.arrayBuffer()
-
-
- const base64Pdf =
- Buffer.from(pdfBuffer)
- .toString("base64")
-
-
- // AI ko instruction
- body.message.text =
- "Summarize this PDF clearly"
-
-
- body.message.inlinePdf =
- base64Pdf
-
-}
   /*
   ============================
-  START MESSAGE
+  IMAGE SUPPORT
+  ============================
+  */
+
+  let inlineImage:any = null
+
+  const photo =
+  body?.message?.photo
+
+  if(photo){
+
+   const fileRes =
+   await fetch(
+
+    `https://api.telegram.org/bot${token}/getFile?file_id=${photo[photo.length-1].file_id}`
+
+   )
+
+   const fileData =
+   await fileRes.json()
+
+   const fileUrl =
+   `https://api.telegram.org/file/bot${token}/${fileData.result.file_path}`
+
+   const imageRes =
+   await fetch(fileUrl)
+
+   const imageBuffer =
+   await imageRes.arrayBuffer()
+
+   inlineImage =
+   Buffer.from(imageBuffer).toString("base64")
+
+   text =
+   "Explain this image"
+
+  }
+
+
+  /*
+  ============================
+  PDF SUPPORT
+  ============================
+  */
+
+  let inlinePdf:any = null
+
+  const document =
+  body?.message?.document
+
+  if(document?.mime_type === "application/pdf"){
+
+   const fileRes =
+   await fetch(
+
+    `https://api.telegram.org/bot${token}/getFile?file_id=${document.file_id}`
+
+   )
+
+   const fileData =
+   await fileRes.json()
+
+   const fileUrl =
+   `https://api.telegram.org/file/bot${token}/${fileData.result.file_path}`
+
+   const pdfRes =
+   await fetch(fileUrl)
+
+   const pdfBuffer =
+   await pdfRes.arrayBuffer()
+
+   inlinePdf =
+   Buffer.from(pdfBuffer).toString("base64")
+
+   text =
+   "Summarize this PDF"
+
+  }
+
+
+  if(!chatId){
+
+   return NextResponse.json({ ok:true })
+
+  }
+
+
+  /*
+  ============================
+  START COMMAND
   ============================
   */
 
   if(text === "/start"){
-
-   const pairingCode =
-   Math.random()
-   .toString(36)
-   .substring(2,8)
-   .toUpperCase()
-
-   const startMessage =
-
-`OpenClaw: access not configured.
-
-Your Telegram user id: ${chatId}
-
-Pairing code: ${pairingCode}
-
-Ask the bot owner to approve with:
-openclaw pairing approve telegram ${pairingCode}`
-
 
    await fetch(
 
@@ -297,7 +220,8 @@ openclaw pairing approve telegram ${pairingCode}`
      body:JSON.stringify({
 
       chat_id:chatId,
-      text:startMessage
+
+      text:"AI connected successfully ✅"
 
      })
 
@@ -305,60 +229,59 @@ openclaw pairing approve telegram ${pairingCode}`
 
    )
 
-
    return NextResponse.json({ ok:true })
 
   }
-/*
-============================
-RESET MEMORY
-============================
-*/
-
-if(text === "/reset"){
-
- await supabase
- .from("ai_memory")
- .delete()
- .eq("telegram_id", chatId)
-
- await fetch(
-
-  `https://api.telegram.org/bot${token}/sendMessage`,
-
-  {
-
-   method:"POST",
-
-   headers:{
-    "Content-Type":"application/json"
-   },
-
-   body:JSON.stringify({
-
-    chat_id:chatId,
-
-    text:"Memory cleared ✅\n\nAb nayi conversation start ho gayi."
-
-   })
-
-  }
-
- )
-
- return NextResponse.json({ ok:true })
-
-}
 
 
   /*
   ============================
-  AI RESPONSE
+  RESET MEMORY
   ============================
   */
 
+  if(text === "/reset"){
 
-  // get connection
+   await supabase
+   .from("ai_memory")
+   .delete()
+   .eq("telegram_id", chatId)
+
+   await fetch(
+
+    `https://api.telegram.org/bot${token}/sendMessage`,
+
+    {
+
+     method:"POST",
+
+     headers:{
+      "Content-Type":"application/json"
+     },
+
+     body:JSON.stringify({
+
+      chat_id:chatId,
+
+      text:"Memory cleared ✅"
+
+     })
+
+    }
+
+   )
+
+   return NextResponse.json({ ok:true })
+
+  }
+
+
+  /*
+  ============================
+  LOAD AI SETTINGS
+  ============================
+  */
+
   const { data: connection } =
   await supabase
   .from("telegram_connections")
@@ -367,7 +290,6 @@ if(text === "/reset"){
   .single()
 
 
-  // get ai settings
   const { data: ai } =
   await supabase
   .from("ai_settings")
@@ -379,23 +301,13 @@ if(text === "/reset"){
   const apiKey =
   ai?.api_key
 
-
   const model =
   ai?.model ||
-  "gemini-2.5-flash"
-
+  "gemini-1.5-flash"
 
   const prompt =
   ai?.prompt ||
   "You are helpful assistant"
-
-
-
-  /*
-  ============================
-  CHECK AI CONFIG
-  ============================
-  */
 
 
   if(!apiKey){
@@ -415,6 +327,7 @@ if(text === "/reset"){
      body:JSON.stringify({
 
       chat_id:chatId,
+
       text:"AI not configured"
 
      })
@@ -428,13 +341,11 @@ if(text === "/reset"){
   }
 
 
-
   /*
   ============================
   LOAD MEMORY
   ============================
   */
-
 
   const { data: memory } =
   await supabase
@@ -442,14 +353,14 @@ if(text === "/reset"){
   .select("role, content")
   .eq("telegram_id", chatId)
   .order("created_at",{ ascending:true })
-  .limit(30)
-
+  .limit(20)
 
 
   const history =
   memory?.map(m=>({
 
-   role: m.role === "assistant"
+   role:
+   m.role === "assistant"
    ? "model"
    : "user",
 
@@ -460,43 +371,106 @@ if(text === "/reset"){
   })) || []
 
 
-
   /*
   ============================
   SAVE USER MESSAGE
   ============================
   */
 
-
   await supabase
   .from("ai_memory")
   .insert({
 
    telegram_id:chatId,
+
    role:"user",
+
    content:text
 
   })
 
-/*
-============================
-TYPING INDICATOR
-============================
-*/
 
-await fetch(`https://api.telegram.org/bot${token}/sendChatAction`,{
- method:"POST",
- headers:{ "Content-Type":"application/json" },
- body:JSON.stringify({
-  chat_id:chatId,
-  action:"typing"
- })
-})
+  /*
+  ============================
+  TYPING
+  ============================
+  */
+
+  await fetch(
+
+   `https://api.telegram.org/bot${token}/sendChatAction`,
+
+   {
+
+    method:"POST",
+
+    headers:{
+     "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+
+     chat_id:chatId,
+
+     action:"typing"
+
+    })
+
+   }
+
+  )
+
+
   /*
   ============================
   AI REQUEST
   ============================
   */
+
+  const parts:any[] = [
+
+   {
+    text:
+    prompt +
+    "\nUser: " +
+    text
+   }
+
+  ]
+
+
+  if(inlineImage){
+
+   parts.push({
+
+    inline_data:{
+
+     mime_type:"image/jpeg",
+
+     data:inlineImage
+
+    }
+
+   })
+
+  }
+
+
+  if(inlinePdf){
+
+   parts.push({
+
+    inline_data:{
+
+     mime_type:"application/pdf",
+
+     data:inlinePdf
+
+    }
+
+   })
+
+  }
 
 
   const aiRes =
@@ -516,41 +490,14 @@ await fetch(`https://api.telegram.org/bot${token}/sendChatAction`,{
 
      contents:[
 
-      {
-       role:"user",
-       parts:[
-        {
-         text:prompt
-        }
-       ]
-     
-      },
-      ...(body.message.inlinePdf
- ? [{
-     inline_data:{
-      mime_type:"application/pdf",
-      data:body.message.inlinePdf
-     }
-   }]
- : []),
-...(body.message.inlineImage
- ? [{
-     inline_data:{
-      mime_type:"image/jpeg",
-      data:body.message.inlineImage
-     }
-   }]
- : []),
-
       ...history,
 
       {
+
        role:"user",
-       parts:[
-        {
-         text:text
-        }
-       ]
+
+       parts
+
       }
 
      ]
@@ -562,10 +509,8 @@ await fetch(`https://api.telegram.org/bot${token}/sendChatAction`,{
   )
 
 
-
   const aiJson =
   await aiRes.json()
-
 
 
   const reply =
@@ -577,24 +522,23 @@ await fetch(`https://api.telegram.org/bot${token}/sendChatAction`,{
   "AI error"
 
 
-
   /*
   ============================
   SAVE AI REPLY
   ============================
   */
 
-
   await supabase
   .from("ai_memory")
   .insert({
 
    telegram_id:chatId,
+
    role:"assistant",
+
    content:reply
 
   })
-
 
 
   /*
@@ -602,7 +546,6 @@ await fetch(`https://api.telegram.org/bot${token}/sendChatAction`,{
   SEND MESSAGE
   ============================
   */
-
 
   await fetch(
 
@@ -619,6 +562,7 @@ await fetch(`https://api.telegram.org/bot${token}/sendChatAction`,{
     body:JSON.stringify({
 
      chat_id:chatId,
+
      text:reply
 
     })
@@ -628,9 +572,7 @@ await fetch(`https://api.telegram.org/bot${token}/sendChatAction`,{
   )
 
 
-
   return NextResponse.json({ ok:true })
-
 
 
  }catch(err){
