@@ -25,7 +25,17 @@ export async function GET(){
    })
 
   }
+// AUTO SET WEBHOOK AFTER USER SENT MESSAGE
 
+await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/set-webhook`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+ token: data.bot_token
+})
+})
   return NextResponse.json({
 
    connected:true,

@@ -70,22 +70,6 @@ export async function POST(req: Request){
   })
 
 
-
-
-  // AUTO SET TELEGRAM WEBHOOK
-await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/set-webhook`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    token: token
-  })
-})
-
-
-
-
   return NextResponse.json({
 
    success:true
