@@ -74,7 +74,7 @@ setStep(3)
 async function handleConnect(){
 
 setChecking(true)
-
+setLoading(true)
 try{
 
 const res = await fetch("/api/check-telegram")
@@ -90,7 +90,7 @@ const token = data.token
 
 
 
-await fetch("/api/set-webhook",{
+fetch("/api/set-webhook",{
 
  method:"POST",
 
@@ -110,7 +110,7 @@ await fetch("/api/set-webhook",{
 /* NEW ADD END */
 
 setChecking(false)
-setLoading(true)
+
 
 setTimeout(()=>{
 
@@ -129,6 +129,7 @@ setSuccess(true)
 }catch(e){
 
 setChecking(false)
+setLoading(false)
 alert("Server error")
 
 }
