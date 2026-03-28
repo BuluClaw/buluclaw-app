@@ -26,20 +26,39 @@ export async function GET(){
 
   }
 
-  // AUTO SET WEBHOOK
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/set-webhook`, {
+  const token = data.bot_token
 
-   method:"POST",
+  // check user ne bot ko message bheja ya nahi
+  const updatesRes = await fetch(
+   `https://api.telegram.org/bot${token}/getUpdates`
+  )
 
-   headers:{
-    "Content-Type":"application/json"
-   },
+  const updates = await updatesRes.json()
 
-   body:JSON.stringify({
-    token:data.bot_token
+  const hasMessage =
+   updates?.result?.length > 0
+
+  if(!hasMessage){
+
+   return NextResponse.json({
+    connected:false
    })
 
-  })
+  }
+
+  // webhook set karo
+  const res = await fetch(
+   `${process.env.NEXT_PUBLIC_SITE_URL}/api/set-webhook`,
+   {
+    method:"POST",
+    headers:{
+     "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+     token:token
+    })
+   }
+  )
 
   const webhookResult = await res.json()
 
@@ -48,7 +67,7 @@ export async function GET(){
   return NextResponse.json({
 
    connected:true,
-   token:data.bot_token
+   token:token
 
   })
 
