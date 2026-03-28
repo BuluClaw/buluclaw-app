@@ -8,129 +8,147 @@ const supabase = createClient(
 
 export async function POST(
  req: NextRequest,
- context: any
-) {
+ context: { params:{ token:string } }
+){
 
- try {
+ try{
 
-  const token =
-   context.params.token
+  const token = context.params.token
 
+  const body = await req.json()
 
-  const body =
-   await req.json()
+  const chatId = body?.message?.chat?.id
 
-
-  const chatId =
-   body?.message?.chat?.id
+  const text = body?.message?.text
 
 
-  const text =
-   body?.message?.text
+  if(!chatId || !text){
 
-
-  if (!chatId || !text) {
-
-   return NextResponse.json({ ok: true })
+   return NextResponse.json({ ok:true })
 
   }
 
 
-  // user ai settings
+  /*
+  =====================================
+  START COMMAND → SEND PAIRING MESSAGE
+  =====================================
+  */
+
+  if(text === "/start"){
+
+   const pairingCode =
+   Math.random().toString(36).substring(2,8).toUpperCase()
+
+   const startMessage = `
+OpenClaw: access not configured.
+
+Your Telegram user id: ${chatId}
+
+Pairing code: ${pairingCode}
+
+Ask the bot owner to approve with:
+openclaw pairing approve telegram ${pairingCode}
+`
+
+   await fetch(`https://api.telegram.org/bot${token}/sendMessage`,{
+
+    method:"POST",
+
+    headers:{
+     "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+
+     chat_id:chatId,
+     text:startMessage
+
+    })
+
+   })
+
+   return NextResponse.json({ ok:true })
+
+  }
+
+
+
+  /*
+  =====================================
+  AI RESPONSE AFTER PAIRING
+  =====================================
+  */
+
+
   const { data } =
-   await supabase
-    .from("telegram_connections")
-    .select(`
-     user_id,
-     ai_settings(
-      api_key,
-      model,
-      prompt
-     )
-    `)
-    .eq("bot_token", token)
-    .single()
+  await supabase
+  .from("telegram_connections")
+  .select(`
+   user_id,
+   ai_settings(
+    api_key,
+    model,
+    prompt
+   )
+  `)
+  .eq("bot_token", token)
+  .single()
 
 
   const ai =
-   data?.ai_settings?.[0]
+  data?.ai_settings?.[0]
 
 
   const apiKey =
-   ai?.api_key
+  ai?.api_key
 
 
   const model =
-   ai?.model || "gemini-2.5-flash"
+  ai?.model ||
+  "gemini-2.5-flash"
 
 
   const prompt =
-   ai?.prompt || "You are helpful assistant"
+  ai?.prompt ||
+  "You are helpful assistant"
 
 
-
-  // call gemini
   const aiRes =
-   await fetch(
-
-`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-
-    {
-
-     method: "POST",
-
-     headers: {
-      "Content-Type": "application/json"
-     },
-
-     body: JSON.stringify({
-
-      contents: [
-       {
-        parts: [
-         {
-          text:
-           prompt +
-           "\nUser: " +
-           text
-         }
-        ]
-       }
-      ]
-
-     })
-
-    }
-
-   )
-
-
-  const aiJson =
-   await aiRes.json()
-
-
-  const reply =
-   aiJson?.candidates?.[0]?.content?.parts?.[0]?.text
-   || "AI error"
-
-
-  // telegram reply
   await fetch(
 
-   `https://api.telegram.org/bot${token}/sendMessage`,
+   `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
 
    {
 
-    method: "POST",
+    method:"POST",
 
-    headers: {
-     "Content-Type": "application/json"
+    headers:{
+     "Content-Type":"application/json"
     },
 
-    body: JSON.stringify({
+    body:JSON.stringify({
 
-     chat_id: chatId,
-     text: reply
+     contents:[
+
+      {
+
+       parts:[
+
+        {
+
+         text:
+         prompt +
+         "\nUser: " +
+         text
+
+        }
+
+       ]
+
+      }
+
+     ]
 
     })
 
@@ -139,19 +157,54 @@ export async function POST(
   )
 
 
-  return NextResponse.json({ ok: true })
+  const aiJson =
+  await aiRes.json()
 
- }
 
- catch (err) {
+  const reply =
+  aiJson?.candidates?.[0]?.content?.parts?.[0]?.text
+  ||
+  "AI error"
+
+
+
+  await fetch(
+
+   `https://api.telegram.org/bot${token}/sendMessage`,
+
+   {
+
+    method:"POST",
+
+    headers:{
+     "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+
+     chat_id:chatId,
+     text:reply
+
+    })
+
+   }
+
+  )
+
+
+  return NextResponse.json({ ok:true })
+
+
+
+ }catch(err){
 
   console.log(err)
 
   return NextResponse.json(
 
-   { ok: false },
+   { ok:false },
 
-   { status: 500 }
+   { status:500 }
 
   )
 
