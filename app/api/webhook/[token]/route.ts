@@ -122,7 +122,7 @@ openclaw pairing approve telegram ${pairingCode}`
 
 
   const ai =
-  data?.ai_settings?.[0]
+  data?.ai_settings[0]
 
 
   const apiKey =
@@ -137,6 +137,37 @@ openclaw pairing approve telegram ${pairingCode}`
   const prompt =
   ai?.prompt ||
   "You are helpful assistant"
+
+
+
+  if(!apiKey){
+
+   await fetch(
+
+    `https://api.telegram.org/bot${token}/sendMessage`,
+
+    {
+
+     method:"POST",
+
+     headers:{
+      "Content-Type":"application/json"
+     },
+
+     body:JSON.stringify({
+
+      chat_id:chatId,
+      text:"AI not configured"
+
+     })
+
+    }
+
+   )
+
+   return NextResponse.json({ ok:true })
+
+  }
 
 
 
