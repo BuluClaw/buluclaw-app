@@ -185,7 +185,10 @@ openclaw pairing approve telegram ${pairingCode}`
   const history =
   memory?.map(m=>({
 
-   role:m.role,
+   role: m.role === "assistant"
+   ? "model"
+   : "user",
+
    parts:[
     { text:m.content }
    ]
